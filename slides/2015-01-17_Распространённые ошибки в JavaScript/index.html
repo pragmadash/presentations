@@ -1,0 +1,464 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+	<title>Распространённые ошибки в JavaScript</title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=792, user-scalable=no">
+	<meta http-equiv="x-ua-compatible" content="ie=edge">
+	<link rel="stylesheet" href="node_modules/shower-ribbon/styles/screen.css">
+	<link rel="stylesheet" href="highlight/default.min.css">
+	<script src="highlight/highlight.min.js"></script>
+	<script>hljs.initHighlightingOnLoad();</script>
+	<style type="text/css">
+		.center-header {
+			text-align: center;
+			font-size:70px;
+		}
+		.center-middle {
+			text-align: center;
+			font-size:100px;
+		}
+		.center-small {
+			text-align: center;
+			font-size:80px;
+		}
+		img.v-center {
+			vertical-align: middle;
+			display: inline-block;
+			width: 100%;
+		}
+		h2.error {
+			color: red;
+			font-size: 35px;
+		}
+	</style>
+</head>
+<body class="list">
+	<header class="caption" id="Caption">
+		<h1>
+			Распространённые ошибки в JavaScript
+			<a href="https://vk.com/jsibnsk" target="_blank">
+				<img src="pictures/jsib_logo.png" id="jsib-logo">
+			</a>
+		</h1>
+		<style>
+			#Caption #jsib-logo {
+				width: 50px;
+				height: 50px;
+				margin-bottom: -10px;
+			}
+		</style>
+	</header>
+	<section class="slide cover" id="Cover"><div>
+		<h2 class="center-header">
+			Распространённые ошибки в JavaScript
+		</h2>
+		<a href="https://vk.com/jsibnsk" target="_blank" class="logo-link">
+			<img src="pictures/jsib_bear.png" class="jsib">
+		</a>
+
+
+		<p class="contacts">
+			<a href="https://github.com/pragmadash" target="_blank" class="logo-link inline">
+				<img src="pictures/github.png" class="github">
+			</a> 
+			<a href="https://twitter.com/pragmadash" target="_blank" class="logo-link inline">
+				<img src="pictures/twitter.png" class="twitter">
+			</a> 
+			pragmadash
+		</p>
+		<p>
+			Денис Речкунов<br/>Node.js-разработчик
+			<a href="http://flamp.ru" target="_blank" class="logo-link">
+				<img src="pictures/flamp.png" class="flamp">
+			</a> 
+		</p>
+		
+		<style>
+			#Cover {
+				background-color: #FFF;
+			}
+
+			#Cover .logo-link {
+				color: transparent;
+				display: block;
+				text-align: center;
+			}
+
+			#Cover .inline{
+				display: inline-block;
+			}
+
+			#Cover .logo-link img {
+				position: relative;
+			}
+
+			#Cover .logo-link .flamp {
+				height: 40px;
+				float: right;
+			}
+			#Cover .logo-link .jsib {
+				margin-top: 0px;
+				height: 300px;
+			}
+
+			#Cover .logo-link .twitter, #Cover .logo-link .github {
+				height: 30px;
+			}
+
+			#Cover p {
+				margin: -20px 0 0;
+				float: right;
+				line-height: normal;
+				text-align: right;
+				font-size: 30px;
+			}
+			#Cover p.contacts {
+				float: left;
+				text-align: left;
+			}
+		</style>
+	</div></section>
+	<section class="slide cover" id="come-on"><div>
+		<img src="pictures/cat-surprise-me.jpg" height="100%" style="margin-left: 30%">
+		<style type="text/css">
+			#come-on {
+				background-color: #fff;
+			}</style>
+	</div></section>
+	<section class="slide shout"><div>
+		<h2>А что если знать все о JavaScript?</h2>
+	</div></section>
+	<section class="slide cover" id="what-if-know-everything"><div>
+		<h2>Вот он узнал всё</h2>
+		<img src="pictures/cat-knows.jpg" width="100%">
+		<style type="text/css">
+			#what-if-know-everything h2 {
+				margin-top: -12%;
+				margin-left: -10%;
+				color: #fff;
+			}
+		</style>
+	</div></section>
+	<section class="slide shout"><div>
+		<h2>Много возможностей</h2>
+	</div></section>
+	<section class="slide shout"><div>
+		<h2>Даже слишком</h2>
+	</div></section>
+	<section class="slide shout"><div>
+		<h2>Большая ответственность!</h2>
+	</div></section>
+	<section class="slide cover" id="keep-safe"><div>
+		<h2 id="pre-title">Мы должны защитить себя</h2>
+		<h2 id="title">сами</h2>
+		<img src="pictures/cat-knight.jpg" height="100%">
+		<style type="text/css">
+			#keep-safe h2#pre-title {
+				margin-left: -10%;
+				color: #000;
+			}
+			#keep-safe h2#title {
+				margin-top: 0;
+				margin-left: -10%;
+				font-size: 200px;
+				color: #000;
+			}
+		</style>
+	</div></section>
+	<section class="slide shout"><div>
+		<h2>И так – начнем</h2>
+	</div></section>
+	<section class="slide"><div>
+		<h2>Что не так?</h2>
+		<pre>
+			<code class="javascript">Constructor.prototype.method = function () {</code>
+			<code class="javascript">	setTimeout(function () {</code>
+			<code class="javascript">		this.anotherMethod();</code>
+			<code class="javascript">	}, 5000);</code>
+			<code class="javascript">};</code>
+			<code class="javascript">Constructor.prototype.anotherMethod = function () { };</code>
+		</pre>
+	</div></section>
+	<section class="slide"><div>
+		<h2>this === хозяин метода setTimeout</h2>
+		<pre>
+			<code class="javascript">Constructor.prototype.method = function () {</code>
+			<code class="javascript">	setTimeout(function () {</code>
+			<code class="javascript">		<mark>this</mark>.anotherMethod();</code>
+			<code class="javascript">	}, 5000);</code>
+			<code class="javascript">};</code>
+			<code class="javascript">Constructor.prototype.anotherMethod = function () { };</code>
+		</pre>
+		<h2 class="error">Uncaught TypeError: undefined is not a function</h2>
+	</div></section>
+	<section class="slide"><div>
+		<h2>this. Решение 1</h2>
+		<pre>
+			<code class="javascript">Constructor.prototype.method = function () {</code>
+			<code class="javascript">	<mark>var self = this;</mark></code>
+			<code class="javascript">	setTimeout(function () {</code>
+			<code class="javascript">		<mark>self</mark>.anotherMethod();</code>
+			<code class="javascript">	}, 5000);</code>
+			<code class="javascript">};</code>
+			<code class="javascript">Constructor.prototype.anotherMethod = function () { };</code>
+		</pre>
+	</div></section>
+	<section class="slide"><div>
+		<h2>this. Решение 2</h2>
+		<pre>
+			<code class="javascript">Constructor.prototype.method = function () {</code>
+			<code class="javascript">	setTimeout(function () {</code>
+			<code class="javascript">		<mark>this</mark>.anotherMethod();</code>
+			<code class="javascript">	}<mark>.bind(this)</mark>, 5000);</code>
+			<code class="javascript">};</code>
+			<code class="javascript">Constructor.prototype.anotherMethod = function () { };</code>
+		</pre>
+	</div></section>
+	<section class="slide"><div>
+		<h2>Что не так?</h2>
+		<pre>
+			<code class="javascript">var index = 123, arr = ['tro', 'lo', 'lo'];</code>
+			<code class="javascript">for (var index = 0; index < arr.length; index++) {</code>
+			<code class="javascript">	arr[index] += 'o';</code>
+			<code class="javascript">}</code>
+			<code class="javascript">console.log(index);</code>
+			Output: 123
+		</pre>
+	</div></section>
+	<section class="slide"><div>
+		<h2>Scope не задается блоком</h2>
+		<pre>
+			<code class="javascript"><mark>var index = 123</mark>, arr = ['tro', 'lo', 'lo'];</code>
+			<code class="javascript">for (<mark>var index = 0</mark>; index < arr.length; index++) {</code>
+			<code class="javascript">	arr[index] += 'o';</code>
+			<code class="javascript">}</code>
+			<code class="javascript">console.log(index);</code>
+			Output: <mark>3</mark>
+		</pre>
+	</div></section>
+	<section class="slide"><div>
+		<h2>Что не так?</h2>
+		<pre>
+			<code class="javascript">var obj = {some: 'first', another: 'second'};</code>
+			<code class="javascript">for(var key in obj) {</code>
+			<code class="javascript">	setTimeout(function () {</code>
+			<code class="javascript">		console.log(obj[key]);</code>
+			<code class="javascript">	}, 1000);</code>
+			<code class="javascript">}</code>
+			Output: first second
+		</pre>
+	</div></section>
+	<section class="slide cover" id="vader"><div>
+		<img src="pictures/vader-filters.jpg" height="100%">
+		<style type="text/css">
+			#vader img {
+				margin-left: 25%;
+			}
+			#vader {
+				background-color: #fff;
+			}
+		</style>
+	</div></section>
+	<section class="slide"><div>
+		<h2>Переменная цикла мутабильна</h2>
+		<pre>
+			<code class="javascript">var obj = {some: 'first', another: 'second'};</code>
+			<code class="javascript">for(var <mark>key</mark> in obj) {</code>
+			<code class="javascript">	setTimeout(function () {</code>
+			<code class="javascript">		console.log(obj[<mark>key</mark>]);</code>
+			<code class="javascript">	}, 1000);</code>
+			<code class="javascript">}</code>
+			Output: <mark>second</mark> second
+		</pre>
+	</div></section>
+	<section class="slide"><div>
+		<h2>Переменная цикла. Решение 1</h2>
+		<pre>
+			<code class="javascript">var obj = {some: 'first', another: 'second'};</code>
+			<code class="javascript">for(var key in obj) {</code>
+			<code class="javascript">	<mark>(function (currentKey){</mark></code>
+			<code class="javascript">		setTimeout(function () {</code>
+			<code class="javascript">			console.log(obj[<mark>currentKey</mark>]);</code>
+			<code class="javascript">		}, 1000);</code>
+			<code class="javascript">	<mark>})(key);</mark></code>	
+			<code class="javascript">}</code>
+		</pre>
+	</div></section>
+	<section class="slide"><div>
+		<h2>Переменная цикла. Решение 2</h2>
+		<pre>
+			<code class="javascript">var obj = {some: 'first', another: 'second'};</code>
+			<code class="javascript">Object.keys(obj)</code>
+			<code class="javascript">	.forEach(function (key) {</code>
+			<code class="javascript">		setTimeout(function () {</code>
+			<code class="javascript">			console.log(obj[key]);</code>
+			<code class="javascript">		}, 1000);</code>
+			<code class="javascript">	});</code>
+		</pre>
+	</div></section>
+	<section class="slide"><div>
+		<h2>Что не так?</h2>
+		<pre>
+			<code class="javascript">var some = 'cool and not ';</code>
+			<code class="javascript">function foo() {</code>
+			<code class="javascript">	console.log(some);</code>
+			<code class="javascript">	var some = 'awful!';</code>
+			<code class="javascript">	console.log(some);</code>
+			<code class="javascript">}</code>
+			<code class="javascript">foo();</code>
+			Output: cool and not awful!
+		</pre>
+	</div></section>
+	<section class="slide"><div>
+		<h2>Hoisting</h2>
+		<pre>
+			<code class="javascript">var some = 'cool and not ';</code>
+			<code class="javascript">function foo() {</code>
+			<code class="javascript">	console.log(some); <mark>// some === undefined</mark></code>
+			<code class="javascript">	var <mark>some</mark> = 'awful!';</code>
+			<code class="javascript">	console.log(some);</code>
+			<code class="javascript">}</code>
+			<code class="javascript">foo();</code>
+			Output: <mark>undefined</mark> awful!
+		</pre>
+	</div></section>
+	<section class="slide"><div>
+		<h2>Что плохого?</h2>
+		<pre>
+			<code class="javascript">for (var index = 0; index < 1000000; index++) {</code>
+			<code class="javascript">	console.log(index);</code>
+			<code class="javascript">}</code>
+		</pre>
+	</div></section>
+	<section class="slide"><div>
+		<h2>Длинный цикл</h2>
+		<pre>
+			<code class="javascript">for (var index = 0; index < 1000000; index++) {</code>
+			<code class="javascript">	console.log(index);</code>
+			<code class="javascript">}</code>
+			<h2>Страница не обрабатывает события<h2/>
+			<h2>Сервер не принимает новые подключения<h2/>
+		</pre>
+	</div></section>
+	<section class="slide"><div>
+		<h2>Длинный цикл. Решение</h2>
+		<pre>
+			<code class="javascript">var index = 0;</code>
+			<code class="javascript">function next() {</code>
+			<code class="javascript">	if (index >= 1000000) { return; }</code>
+			<code class="javascript">	console.log(index++);</code>
+			<code class="javascript">	setTimeout(next, 0);</code>
+			<code class="javascript">}</code>
+			<code class="javascript">next();</code>
+		</pre>
+	</div></section>
+	<section class="slide"><div>
+		<h2>Что нет так?</h2>
+		<pre>
+			<code class="javascript">var arr = [];</code>
+			<code class="javascript">arr[5] = 'some';</code>
+			<code class="javascript">console.log(arr.length);</code>
+			Output: 1
+		</pre>
+	</div></section>
+	<section class="slide"><div>
+		<h2>length === max(index) + 1</h2>
+		<pre>
+			<code class="javascript">var arr = [];</code>
+			<code class="javascript">arr[<mark>5</mark>] = 'some';</code>
+			<code class="javascript">console.log(arr.length);</code>
+			Output: <mark>6</mark>
+			<h2>Использовать push/unshift/pop/shift</h2>
+		</pre>
+	</div></section>
+	<section class="slide"><div>
+		<h2>Что нет так?</h2>
+		<pre>
+			<code class="javascript">var arr = [];</code>
+			<code class="javascript">arr[5] = 'some';</code>
+			<code class="javascript">delete arr[5];</code>
+			<code class="javascript">console.log(arr.length);</code>
+			Output: 0
+		</pre>
+	</div></section>
+	<section class="slide"><div>
+		<h2>undefined x 6</h2>
+		<pre>
+			<code class="javascript">var arr = [];</code>
+			<code class="javascript">arr[5] = 'some';</code>
+			<code class="javascript">delete arr[5];</code>
+			<code class="javascript">console.log(arr.length);</code>
+			Output: <mark>6</mark>
+			<h2>Не использовать delete</h2>
+		</pre>
+	</div></section>
+	<section class="slide cover" id="serious-business"><div>
+		<h2>И последний пример</h2>
+		<img src="pictures/serious-cat.jpg" class="v-center">
+		<style type="text/css">
+			#serious-business h2{
+				margin-top: -10%;
+				margin-left: 10%;
+				font-size: 70px;
+				color: #fff;
+			}
+		</style>
+	</div></section>
+	<section class="slide"><div>
+		<h2>Что не так?</h2>
+		<pre>
+			<code class="javascript">function foo () {</code>
+			<code class="javascript">	return</code>
+			<code class="javascript">	{</code>
+			<code class="javascript">		name: 'Batman'</code>
+			<code class="javascript">	};</code>
+			<code class="javascript">}</code>
+			<code class="javascript">console.log(foo());</code>
+		</pre>
+	</div></section>
+	<section class="slide"><div>
+		<h2>Конечно не Batman, он великолепен!</h2>
+		<pre>
+			<code class="javascript">function foo () {</code>
+			<code class="javascript">	retur<mark>n</mark></code>
+			<code class="javascript">	<mark>{</mark></code>
+			<code class="javascript">		name: 'Batman'</code>
+			<code class="javascript">	};</code>
+			<code class="javascript">}</code>
+			<code class="javascript">console.log(foo());</code>
+			<h2>Парсер подставит ';'</h2>
+		</pre>
+	</div></section>
+	<section class="slide"><div>
+		<h2>И вообще советы</h2>
+		<ul>
+			<li class="next">Использовать <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode">Strict Mode</a></li>
+			<li class="next">Проверять код JShint</li>
+			<li class="next">Использовать IDE – WebStorm, например</li>
+			<li class="next">Boolean(x), Number(x), String(x) – для приведения типов</li>
+			<li class="next"><a href="https://developer.mozilla.org/">Mozilla Developer Network</a></li>
+		</ul>
+	</div></section>
+	<section class="slide cover" id="qa"><div>
+		<h2>Вопросы?</h2>
+		<img src="pictures/qa.jpeg" class="v-center">
+		<style type="text/css">
+			#qa h2{
+				margin-top: 50%;
+				margin-left: 20%;
+				font-size: 100px;
+				color: #fff;
+			}
+		</style>
+	</div></section>
+	<!--
+		To hide progress bar from entire presentation
+		just remove “progress” element.
+		-->
+	<div class="progress"><div></div></div>
+	<script src="node_modules/shower-core/shower.min.js"></script>
+	<!-- Copyright © 2014 Yours Truly, Famous Inc. -->
+	<!-- Photos by John Carey, fiftyfootshadows.net -->
+</body>
+</html>

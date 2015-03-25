@@ -1,0 +1,16 @@
+{
+  "name": "jsib-introduction",
+  "version": "1.0.0",
+  "description": "Presentation about JSib community and its goals",
+  "main": "index.js",
+  "dependencies": {
+    "shower-core": "^1.0.7",
+    "shower-ribbon": "^1.0.11"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Denis Rechkunov <denis.rechkunov@gmail.com>",
+  "license": "MIT"
+}
