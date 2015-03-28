@@ -1,0 +1,613 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+	<title>Изоморфный JavaScript – Будущее уже здесь</title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=792, user-scalable=no">
+	<meta http-equiv="x-ua-compatible" content="ie=edge">
+	<link rel="stylesheet" href="node_modules/shower-ribbon/styles/screen.css">
+	<link rel="stylesheet" href="highlight/default.min.css">
+	<script src="highlight/highlight.min.js"></script>
+	<script>hljs.initHighlightingOnLoad();</script>
+	<style type="text/css">
+		section.cover.white {
+			background-color: white;
+		}
+		h2.white {
+			color: white;
+		}
+		h2.black {
+			color: black;
+		}
+		h2.center {
+			text-align: center;
+		}
+		h2.small {
+			font-size:80px;
+		}
+		h2.normal {
+			font-size:100px;
+		}
+		h2.top {
+			margin-top: -50px;
+		}
+		h2.upper-bottom {
+			margin-top: 300px;
+		}
+		h2.bottom {
+			margin-top: 400px;
+		}
+		pre.small-code {
+			font-size: 18px;
+		}
+		ul.v-aligned img {
+			height: 32px;
+			vertical-align: middle;
+		}
+		h2.shadowed {
+			color: white;
+			text-shadow: 1px 1px 2px black, 0 0 1em black, 0 0 0.2em black;
+		}
+	</style>
+</head>
+<body class="list">
+	<header class="caption" id="Caption">
+		<h1>
+			Изоморфный JavaScript – Будущее уже здесь
+			<img src="pictures/logos/javascript.svg" id="javascript-logo">
+		</h1>
+		<style>
+			#Caption #javascript-logo {
+				width: 50px;
+				height: 50px;
+				margin-bottom: -10px;
+			}
+		</style>
+	</header>
+	<section class="slide cover" id="Cover"><div>
+		<h2 class="center white top shadowed">
+			Изоморфный JavaScript
+		</h2>
+		<img src="pictures/covers/cover.jpg" width="100%">
+		<h2 class="center white upper-bottom shadowed">
+			Будущее&nbsp;уже&nbsp;здесь
+		</h2>
+		<div class="author shadowed">
+			Денис Речкунов, Flamp
+		</div>
+		<style>
+			#Cover .author {
+				margin-top: 60px;
+				margin-left: -100px;
+				text-align: right;
+				color: white;
+				width: 100%;
+			}
+		</style>
+	</div></section>
+	<section class="slide cover" id="From-future"><div>
+		<h2 class="center white top shadowed">
+			«Мартин, в будущем
+		</h2>
+		<img src="pictures/covers/cover11.jpg" width="100%">
+		<h2 class="center white upper-bottom shadowed">
+			JavaScript изоморфный!»
+		</h2>
+		<style>
+			#From-future .top {
+				margin-top: 50px;
+			}
+		</style>
+	</div></section>
+	<section class="slide"><div>
+		<h2>Что такое изоморфный JavaScript код?</h2>
+		<ul>
+			<li class="next">Исполняется в различных окружениях<br>(нам важен сервер и браузер)</li>
+			<li class="next">Гарантирует одно поведение</li>
+			<li class="next">Справляется с разностью окружений через абстракции</li>
+		</ul>
+	</div></section>
+	<section class="slide"><div>
+		<h2>Что он нам даёт?</h2>
+		<ul>
+			<li class="next">Мы можем создать изоморфный Web UI</li>
+			<li class="next">Который будет строить HTML на сервере для SEO</li>
+			<li class="next">Работать как Single Page Application в браузере</li>
+			<li class="next">Получим единую языковую среду &mdash; JavaScript</li>
+			<li class="next">Максимально переиспользуем код</li>
+			<li class="next">Получим прирост производительности на старте (ms vs sec)</li>
+		</ul>
+	</div></section>
+		<section class="slide"><div>
+		<h2>Что он нам не даёт?</h2>
+		<ul>
+			<li class="next">Не работаем с хранилищем</li>
+			<li class="next">Как правило, работаем с RESTful API</li>
+			<li class="next">Не включает код для обеспечения безопасности</li>
+			<li class="next">Чаще всего это только Web UI</li>
+		</ul>
+	</div></section>
+	<section class="slide cover" id="History"><div>
+		<h2 class="center white bottom shadowed">
+			Как мы к этому пришли?
+		</h2>
+		<img src="pictures/covers/cover4.jpg" height="100%">
+		<style>
+			#History .bottom {
+				margin-top: 400px;
+			}
+		</style>
+	</div></section>
+	<section class="slide cover" id="Nodejs"><div>
+		<h2 class="center white top">
+			27 мая 2009 года вышел релиз
+		</h2>
+		<img src="pictures/logos/nodejs.png" width="100%">
+		<h2 class="center white bottom">
+			Автор &mdash; Райан Дал, разработчик из Joyent
+		</h2>
+		<style>
+			#Nodejs .bottom {
+				margin-top: 400px;
+			}
+		</style>
+	</div></section>
+	<section class="slide cover" id="This-is-it"><div>
+		<h2 class="center white bottom normal shadowed">
+			Вот оно!
+		</h2>
+		<img src="pictures/covers/cover6.jpg" height="100%">
+		<style>
+			#This-is-it img {
+				margin-left: -100px;
+			}
+		</style>
+	</div></section>
+	<section class="slide cover white" id="Browserify"><div>
+		<h2 class="center top">
+			В 2011 году вышел релиз сборщика
+		</h2>
+		<img src="pictures/logos/browserify.png" width="100%">
+		<h2 class="center bottom">
+			Автор &mdash; Джеймс Холлидей (substack)
+		</h2>
+		<style>
+			#Browserify img {
+				box-sizing: border-box;
+				padding-left: 100px;
+				padding-right: 100px;
+				margin-top: 120px;
+			}
+		</style>
+	</div></section>
+	<section class="slide cover"><div>
+		<h2 class="center white top">
+			Словно Делориан для изоморфного JavaScript
+		</h2>
+		<img src="pictures/covers/cover5.jpg" height="100%">
+	</div></section>
+	<section class="slide cover" id="UsedDelorian"><div>
+		<h2 class="center top white shadowed">
+			Люди начали его использовать 
+		</h2>
+		<img src="pictures/covers/cover7.jpg" height="100%">
+		<h2 class="center bottom white shadowed">
+			В своих проектах
+		</h2>
+		<style>
+			#UsedDelorian img {
+				margin-left: -40px;
+			}
+		</style>
+	</div></section>
+	<section class="slide cover" id="Nodejitsu"><div>
+		<h2 class="center top whtie shadowed">
+			18 октября 2011 появился пост Nodejitsu
+		</h2>
+		<img src="pictures/covers/cover3.jpg" width="100%">
+		<h2 class="center bottom white shadowed">
+			"Scaling Isomorphic Javascript Code"
+		</h2>
+		<style>
+			#Nodejitsu img {
+				margin-left: 40px;
+			}
+		</style>
+	</div></section>
+	<section class="slide cover"><div>
+		<h2 class="center top white shadowed">
+			9 ноября 2011 nodejitsu представляет фреймворк
+		</h2>
+		<img src="pictures/logos/flatiron.jpg" width="100%">
+	</div></section>
+	<section class="slide cover"><div>
+		<h2 class="center top white shadowed">
+			16 июня 2012 года Yahoo релизит фреймворк Mojito
+		</h2>
+		<img src="pictures/covers/mojito.jpg" width="100%">
+	</div></section>
+	<section class="slide cover"><div>
+		<h2 class="center top white shadowed">
+			Но термин "изоморфный" 
+		</h2>
+		<img src="pictures/covers/spike.jpg" width="100%">
+		<h2 class="center bottom white shadowed">
+			Стал популярным благодаря Спайку&nbsp;Брехему из Airbnb
+		</h2>
+	</div></section>
+	<section class="slide cover white"><div>
+		<h2 class="center top">
+			11 ноября 2013 появляется пост
+		</h2>
+		<img src="pictures/covers/airbnb.png" height="100%">
+		<h2 class="center bottom">
+			"Isomorphic&nbsp;JavaScript: The&nbsp;Future&nbsp;of&nbsp;Web&nbsp;Apps"
+		</h2>
+	</div></section>
+	<section class="slide cover" id="Spike2"><div>
+		<img src="pictures/covers/spike2.jpg" width="100%">
+		<h2 class="center bottom shadowed">
+			Позже Спайк Брехм выступает на JSConf&nbsp;2014
+			с докладом "Building&nbsp;Isomorphic&nbsp;Apps"
+		</h2>
+		<style>
+			#Spike2 h2 {
+				color: white;
+				background-color: black;
+				width: 700px;
+			}
+			#Spike2 .bottom {
+				margin-top: 360px;
+			}
+		</style>
+	</div></section>
+	<section class="slide cover"><div>
+		<img src="pictures/covers/cover8.png" height="100%">
+		<h2 class="center bottom white shadowed">
+			Как добиться изоморфизма?
+		</h2>
+	</div></section>
+	<section class="slide"><div>
+		<h2>Нужно решить ряд проблем</h2>
+		<ul>
+			<li class="next">Разный рендеринг</li>
+			<li class="next">Зависимость от окружения</li>
+			<li class="next">Запросы за данными к RESTful API по-разному</li>
+			<li class="next">Собирать серверный код для браузера</li>
+		</ul>
+	</div></section>
+	<section class="slide cover" id="Rendering"><div>
+		<img src="pictures/covers/cover12.jpg" width="100%">
+		<h2 class="center top white shadowed">
+			Разный рендеринг
+		</h2>
+		<style type="text/css">
+			#Rendering img {
+				margin-top: 110px;
+			}
+		</style>
+	</div></section>
+	<section class="slide"><div>
+		<h2>Virtual DOM (на сервере)</h2>
+		<ul>
+			<li class="next">Имитация DOM для фронт-енд фреймворка на сервере</li>
+			<li class="next">Приложение применяет изменения к эталонному DOM</li>
+			<li class="next">Происходит сериализация в строку HTML</li>
+			<li class="next">HTML уходит в браузер</li>
+		</ul>
+	</div></section>
+	<section class="slide"><div>
+		<h2>Virtual DOM (в браузере)</h2>
+		<ul>
+			<li class="next">Приложение делает изменения в Virtual DOM</li>
+			<li class="next">Состояние Virtual DOM сравнивается с DOM</li>
+			<li class="next">При найденном отличии применяется поэлементный patch к DOM</li>
+			<li class="next">Используется в <a href="http://facebook.github.io/react/" target="_blank">React</a></li>
+		</ul>
+	</div></section>
+	<section class="slide cover"><div>
+		<img src="pictures/covers/cover13.jpg" height="100%">
+		<h2 class="center bottom white shadowed">
+			Мартин не в восторге от Virtual DOM
+		</h2>
+	</div></section>
+	<section class="slide"><div>
+		<h2>Template Helpers (на сервере)</h2>
+		<ul>
+			<li class="next">Берем шаблонизатор, например Handlebars</li>
+			<li class="next">Определяем Helper, который будет рендерить View с данными</li>
+			<li class="next">При вызове хелпера запрашиваем данные для шаблона</li>
+			<li class="next">Рендерим шаблон с данными, создавая элемент-обертку с меткой</li>
+			<li class="next">Когда отрендерили все View – отдаем HTML браузеру</li>
+		</ul>
+	</div></section>
+	<section class="slide"><div>
+		<h2>Template Helpers (в браузере)</h2>
+		<ul>
+			<li class="next">Компилируем шаблоны для браузера</li>
+			<li class="next">Клиентский код привязывается к помеченным элементам-обёрткам</li>
+			<li class="next">Обновляем поддеревья DOM (каждую View полностью)</li>
+			<!-- <li class="next">Используется в <a href="https://github.com/2gis/slot" target="_blank">Slot</a></li> -->
+		</ul>
+	</div></section>
+	<section class="slide cover"><div>
+		<img src="pictures/covers/cover14.png" height="100%">
+		<h2 class="center bottom white shadowed">
+			Мартин по-прежнему не сильно рад
+		</h2>
+	</div></section>
+	<section class="slide"><div>
+		<h2>Прогрессивный рендеринг (на сервере)</h2>
+		<ul>
+			<li class="next">Используем кастомные тэги HTML</li>
+			<li class="next">Используем <a href="https://nodejs.org/api/stream.html#stream_api_for_stream_implementors" target="_blank">Node.js Streams API</a> и реализуем Transform Stream</li>
+			<li class="next"><code class="javascript">ourTransform.pipe(response).end(root.render());</code></li>
+			<li class="next">Transform Stream ищет наши тэги в потоке HTML</li>
+			<li class="next">Если нашел&mdash;рендерит в них соответствующий шаблон</li>
+			<li class="next">Который пропускается через такой же Transform Stream</li>
+			<li class="next">Весь отрендеренный HTML сразу порциями уходит в браузер</li>
+		</ul>
+	</div></section>
+	<section class="slide cover white" id="progressive-rendering"><div>
+		<img src="pictures/progressive-rendering.png" width="100%">
+		<style type="text/css">
+			#progressive-rendering img {
+				margin-top: 70px;
+			}
+		</style>
+	</div></section>
+	<section class="slide"><div>
+		<h2 class="center">Когда у вас прогрессивный рендеринг</h2>
+		<img src="pictures/network.png" width="100%">
+	</div></section>
+	<section class="slide"><div>
+		<h2>Прогрессивный рендеринг (в браузере)</h2>
+		<ul>
+			<li class="next">Компилируем шаблоны для браузера</li>
+			<li class="next">Используем привязки клиентского кода по нашим тэгам HTML</li>
+			<li class="next">Обновляем поддеревья DOM (каждый HTML-тэг полностью)</li>
+			<li class="next">Используется в <a href="http://catberry.org" target="_blank">Catberry.js</a></li>
+		</ul>
+	</div></section>
+	<section class="slide cover"><div>
+		<img src="pictures/covers/cover15.jpg" width="100%">
+		<h2 class="center bottom white shadowed">
+			Мы с Мартином выбираем этот вариант
+		</h2>
+	</div></section>
+	<section class="slide cover"><div>
+		<img src="pictures/covers/cover16.jpg" height="100%">
+		<h2 class="center bottom white shadowed">
+			Как балансировать между серверным и браузерным окружением
+		</h2>
+	</div></section>
+	<section class="slide"><div>
+		<h2>Серверный роутер</h2>
+		<pre class="small-code">
+			<code class="javascript">Router.prototype.route = function (request, response) {</code>
+			<code class="javascript">  var context = { ... };</code>
+			<code class="javascript">  var state = this.getState(request.url);</code>
+			<code class="javascript">  renderer.render(state, context, response);</code>
+			<code class="javascript">};</code>
+		</pre>
+	</div></section>
+	<section class="slide"><div>
+		<h2>Серверный контекст</h2>
+		<pre class="small-code">
+			<code class="javascript">var context = {</code>
+			<code class="javascript">  userAgent: request.headers['user-agent'],</code>
+			<code class="javascript">  location: request.url,</code>
+			<code class="javascript">  redirect: function (url) {</code>
+			<code class="javascript">    response.writeHead(302, {Location: url});</code>
+			<code class="javascript">  },</code>
+			<code class="javascript">  getCookie: function () { return request.headers.cookie; }</code>
+			<code class="javascript">  setCookie: function (string) {</code>
+			<code class="javascript">    response.setHeader('Set-Cookie', string);</code>
+			<code class="javascript">  }</code>
+			<code class="javascript">};</code>
+		</pre>
+	</div></section>
+	<section class="slide"><div>
+		<h2>Браузерный роутер</h2>
+		<pre class="small-code">
+			<code class="javascript">Router.prototype.route = function (state) {</code>
+			<code class="javascript">  var context = { ... }</code>
+			<code class="javascript">  renderer.render(state, context);</code>
+			<code class="javascript">};</code>
+		</pre>
+	</div></section>
+	<section class="slide"><div>
+		<h2>Браузерный контекст</h2>
+		<pre class="small-code">
+			<code class="javascript">var context = {</code>
+			<code class="javascript">  userAgent: window.navigator.userAgent,</code>
+			<code class="javascript">  location: window.location.pathname + window.location.search,</code>
+			<code class="javascript">  redirect: function (url) {</code>
+			<code class="javascript">    window.location = url;</code>
+			<code class="javascript">  },</code>
+			<code class="javascript">  getCookie: function () { return document.cookie; }</code>
+			<code class="javascript">  setCookie: function (string) {</code>
+			<code class="javascript">    document.cookie = string;</code>
+			<code class="javascript">  }</code>
+			<code class="javascript">};</code>
+		</pre>
+	</div></section>
+	<section class="slide"><div>
+		<h2>На что срабатывает роутинг?</h2>
+		<pre class="small-code">
+			<code class="javascript">window.addEventListener('popstate', function (event) {</code>
+			<code class="javascript">  router.route(event.state);</code>
+			<code class="javascript">});</code>
+			<code class="javascript">window.document.body.addEventListener('click', function (event) {</code>
+			<code class="javascript">  event.preventDefault();</code>
+			<code class="javascript">  var location = window.location.toString();</code>
+			<code class="javascript">  var state = router.getState(location);</code>
+			<code class="javascript">  window.history.pushState(state, '', location);</code>
+			<code class="javascript">  router.route(state);</code>
+			<code class="javascript">});</code>
+		</pre>
+	</div></section>
+	<section class="slide cover"><div>
+		<img src="pictures/covers/cover19.png" height="100%">
+		<h2 class="center bottom white shadowed">
+			Ну а остальное детали
+		</h2>
+	</div></section>
+	<section class="slide"><div>
+		<h2>Запросы к API по-разному</h2>
+		<ul>
+			<li class="next">На сервере http или https модули node.js</li>
+			<li class="next">В браузере XMLHttpRequest</li>
+			<li class="next">Есть готовые решения <br/>(<a href="https://www.npmjs.com/package/superagent" target="_blank">superagent</a>, <a href="https://www.npmjs.com/package/catberry-uhr">catberry-uhr</a>, <a href="https://www.npmjs.com/package/iso-http">iso-http</a>)</li>
+		</ul>
+	</div></section>
+	<section class="slide"><div>
+		<h2>Собирать серверный код для браузера</h2>
+		<ul>
+			<li class="next">Для нас это уже делает <a href="http://browserify.org/" target="_blank">browserify</a></li>
+			<li class="next">Умеет подставлять браузерные версии модулей node.js</li>
+			<li class="next">Делает заглушки для того, что работать не может</li>
+			<li class="next">Можно указать в package.json замену на браузерную версию</li>
+		</ul>
+	</div></section>
+	<section class="slide"><div>
+		<h2>package.json</h2>
+		<pre>
+			<code class="javascript">"browser": {</code>
+			<code class="javascript">  "./lib/Renderer.js": "./browser/Renderer.js",</code>
+			<code class="javascript">  "./lib/Router.js": "./browser/Router.js"</code>
+			<code class="javascript">}</code>
+		</pre>
+	</div></section>
+	<section class="slide"><div>
+		<h2>И так, что мы имеем?</h2>
+		<ul>
+			<li class="next">Рендеринг можно реализовать несколькими способами</li>
+			<li class="next">С разницей окружений вполне можно разобраться</li>
+			<li class="next">Есть готовые изоморфные npm-пакеты для HTTP-запросов</li>
+			<li class="next">Browserify решает проблемы со сборкой</li>
+		</ul>
+	</div></section>
+	<section class="slide"><div>
+		<h2>Готовые фреймворки:</h2>
+		<ul class="v-aligned">
+			<li>
+				<img src="pictures/frameworks/meteor.png">
+				<a href="https://www.meteor.com/" target="_blank">Meteor</a>
+			</li>
+			<li>
+				<img src="pictures/frameworks/derby.png">
+				<a href="http://derbyjs.com/" target="_blank">Derby</a>
+			</li>
+			<li>
+				<img src="pictures/frameworks/react.png">
+				<a href="http://facebook.github.io/react/" target="_blank">React</a>
+			</li>
+			<li>
+				<img src="pictures/frameworks/catberry.png">
+				<a href="http://catberry.org" target="_blank">Catberry.js</a>
+			</li>
+			<li>
+				<img src="pictures/frameworks/slot.png">
+				<a href="https://github.com/2gis/slot" target="_blank">Slot</a>
+			</li>
+			<li>
+				<img src="pictures/frameworks/taunus.png">
+				<a href="https://github.com/taunus/taunus" target="_blank">Taunus</a>
+			</li>
+			<li>ещё на <a href="http://isomorphic.net/">isomorphic.net</a></li>
+		</ul>
+	</div></section>
+	<section class="slide"><div>
+		<h2>Будущее уже здесь</h2>
+		Несколько изоморфных веб-приложений:
+		<ul class="v-aligned">
+			<li>
+				<img src="pictures/web-sites/instagram.png">
+				<a href="https://instagram.com/" target="_blank">instagram.com</a>
+			</li>
+			<li>
+				<img src="pictures/web-sites/flickr.png">
+				<a href="https://www.flickr.com/" target="_blank">flickr.com</a>
+			</li>
+			<li>
+				<img src="pictures/web-sites/airbnb.png">
+				<a href="https://www.airbnb.ru/" target="_blank">airbnb.ru</a>
+			</li>
+			<li>
+				<img src="pictures/web-sites/2gis.png">
+				<a href="http://2gis.ru/" target="_blank">2gis.ru</a>
+			</li>
+			<li>
+				<img src="pictures/web-sites/konfettin.png">
+				<a href="http://konfettin.ru/" target="_blank">konfettin.ru</a>
+			</li>
+			<li>
+				<img src="pictures/web-sites/flamp.jpg">
+				<a href="http://flamp.ru/" target="_blank">flamp.ru</a>
+			</li>
+		</ul>
+	</div></section>
+	<section class="slide cover" id="qa"><div>
+		<h2 class="center shadowed top">Спасибо за внимание!</h2>
+		<img src="pictures/covers/cover10.jpg" width="100%">
+		<div class="signature">
+			<a href="http://catberry.org" target="_blank">catberry.org</a><br/>
+			Денис Речкунов, Flamp (<a href="mailto:denis.rechkunov@gmail.com">denis.rechkunov@gmail.com</a>)
+			<div class="contacts">
+				<a href="https://github.com/pragmadash" target="_blank" class="logo-link inline">
+					<img src="pictures/logos/github.png" class="github">
+				</a>
+				<a href="https://twitter.com/pragmadash" target="_blank" class="logo-link inline">
+					<img src="pictures/logos/twitter.png" class="twitter">
+				</a>
+				pragmadash
+			</div>
+		</div>
+		<style type="text/css">
+			#qa img {
+				margin-top: -50px;
+			}
+			#qa h2 {
+				color: white;
+			}
+			#qa .top {
+				margin-top: -70px;
+			}
+			#qa .logo-link {
+				color: transparent;
+				text-align: center;
+			}
+			#qa .inline{
+				display: inline-block;
+			}
+			#qa .logo-link .twitter, #qa .logo-link .github {
+				position: relative;
+				height: 30px;
+			}
+			#qa .signature {
+				color: white;
+				margin-top: 370px;
+				text-align: center;
+			}
+			#qa .signature a {
+				text-decoration: none;
+				background: transparent;
+				color: white;
+			}
+			#qa .contacts {
+				margin-top: -30px;
+				font-size: 50px;
+			}
+		</style>
+	</div></section>
+	<!--
+		To hide progress bar from entire presentation
+		just remove “progress” element.
+		-->
+	<div class="progress"><div></div></div>
+	<script src="node_modules/shower-core/shower.min.js"></script>
+	<!-- Copyright © 2014 Yours Truly, Famous Inc. -->
+	<!-- Photos by John Carey, fiftyfootshadows.net -->
+</body>
+</html>
