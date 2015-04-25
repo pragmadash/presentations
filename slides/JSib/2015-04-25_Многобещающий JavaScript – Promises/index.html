@@ -1,0 +1,505 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+	<title>Многообещающий JavaScript – Promises</title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=792, user-scalable=no">
+	<meta http-equiv="x-ua-compatible" content="ie=edge">
+	<link rel="stylesheet" href="node_modules/shower-ribbon/styles/screen.css">
+	<link rel="stylesheet" href="highlight/default.min.css">
+	<script src="highlight/highlight.min.js"></script>
+	<script>hljs.initHighlightingOnLoad();</script>
+	<style type="text/css">
+		section.cover.white {
+			background-color: white;
+		}
+		h2.white {
+			color: white;
+		}
+		h2.black {
+			color: black;
+		}
+		h2.center {
+			text-align: center;
+		}
+		h2.small {
+			font-size:80px;
+		}
+		h2.normal {
+			font-size:100px;
+		}
+		h2.top {
+			margin-top: -50px;
+		}
+		h2.upper-bottom {
+			margin-top: 300px;
+		}
+		h2.bottom {
+			margin-top: 400px;
+		}
+		pre.small-code {
+			font-size: 18px;
+		}
+		ul.v-aligned img {
+			height: 32px;
+			vertical-align: middle;
+		}
+		h2.shadowed {
+			color: white;
+			text-shadow: 1px 1px 2px black, 0 0 1em black, 0 0 0.2em black;
+		}
+		code {
+			font-size: 20px;
+		}
+	</style>
+</head>
+<body class="list">
+	<header class="caption" id="Caption">
+		<h1>
+			Многообещающий JavaScript – Promises
+			<a href="https://vk.com/jsibnsk" target="_blank">
+				<img src="pictures/jsib_logo.png" id="jsib-logo">
+			</a>
+		</h1>
+		<style>
+			#Caption #jsib-logo {
+				width: 50px;
+				height: 50px;
+				margin-bottom: -10px;
+			}
+		</style>
+	</header>
+	<section class="slide cover" id="Cover"><div>
+		<h2 class="center-header">
+			Многообещающий JavaScript – Promises
+		</h2>
+		<a href="https://vk.com/jsibnsk" target="_blank" class="logo-link">
+			<img src="pictures/jsib_bear.png" class="jsib">
+		</a>
+
+
+		<p class="contacts">
+			<a href="https://github.com/pragmadash" target="_blank" class="logo-link inline">
+				<img src="pictures/color-github.png" class="github">
+			</a> 
+			<a href="https://twitter.com/pragmadash" target="_blank" class="logo-link inline">
+				<img src="pictures/color-twitter.png" class="twitter">
+			</a> 
+			pragmadash
+		</p>
+		<p>
+			Денис Речкунов<br/>Ведущий JavaScript-разработчик
+			<a href="http://flamp.ru" target="_blank" class="logo-link">
+				<img src="pictures/flamp.png" class="flamp">
+			</a> 
+		</p>
+		
+		<style>
+			#Cover {
+				background-color: #FFF;
+			}
+
+			#Cover .logo-link {
+				color: transparent;
+				display: block;
+				text-align: center;
+			}
+
+			#Cover .inline{
+				display: inline-block;
+			}
+
+			#Cover .logo-link img {
+				position: relative;
+			}
+
+			#Cover .logo-link .flamp {
+				height: 40px;
+				float: right;
+			}
+			#Cover .logo-link .jsib {
+				margin-top: 0px;
+				height: 300px;
+			}
+
+			#Cover .logo-link .twitter, #Cover .logo-link .github {
+				height: 30px;
+			}
+
+			#Cover p {
+				margin: -20px 0 0;
+				float: right;
+				line-height: normal;
+				text-align: right;
+				font-size: 30px;
+			}
+			#Cover p.contacts {
+				float: left;
+				text-align: left;
+			}
+		</style>
+	</div></section>
+	
+	<section class="slide shout"><div>
+		<h2>Немного издалека...</h2>
+	</div></section>
+
+	<section class="slide"><div>
+		<h2>За что я люблю JavaScript?</h2>
+		<ul>
+			<li class="next">Очень удобно писать асинхронный код...</li>
+			<li class="next">JavaScript-код всегда исполняется в одном потоке</li>
+			<li class="next">Все "блокирующие" операции выполняются асинхронно<br/>(в node.js это <a href="https://github.com/libuv/libuv" target="_blank">libuv</a>)</li>
+			<li class="next">Благодаря Event Loop, не нужна синхронизация между потоками<br/>(блокировки, каналы, вот это всё)</li>
+		</ul>
+	</div></section>
+
+	<section class="slide"><div>
+		<h2>А зачем нам вообще асинхронный код?</h2>
+		<ul>
+			<li class="next">Для параллельной обработки большого набора данных</li>
+			<li class="next">Чтобы процесс не простаивал, пока исполняется длительная операция</li>
+			<li class="next">К сожалению, для первого JavaScript совсем не годится</li>
+			<li class="next">Зато всё круто со вторым...</li>
+		</ul>
+	</div></section>
+
+	<section class="slide cover" id="come-on"><div>
+		<img src="pictures/event-loop.png" height="100%" style="margin-left: -5%">
+	</div></section>
+
+	<section class="slide"><div>
+		<h2>Callback</h2>
+		<pre>
+			<code class="javascript">callACat(function () {</code>
+			<code class="javascript">	console.log('Hello, Cat!');</code>
+			<code class="javascript">});</code>
+		</pre>
+	</div></section>
+
+	<section class="slide"><div>
+		<h2>Callback Hell</h2>
+		<pre>
+			<code class="javascript">callACat(function () {</code>
+			<code class="javascript">	callADog(function () {</code>
+			<code class="javascript">		callAHorse(function () {</code>
+			<code class="javascript">			callSanta(function () {</code>
+			<code class="javascript">				console.log('Where am I?');</code>
+			<code class="javascript">			});</code>
+			<code class="javascript">		});</code>
+			<code class="javascript">	});</code>
+			<code class="javascript">});</code>
+		</pre>
+	</div></section>
+
+	<section class="slide"><div>
+		<h2>Event Emitter</h2>
+		<pre>
+			<code class="javascript">phone</code>
+			<code class="javascript"> .on('cat', function(){ phone.callADog(); })</code>
+			<code class="javascript"> .on('dog', function(){ phone.callAHorse(); })</code>
+			<code class="javascript"> .on('horse', function(){ phone.callSanta(); })</code>
+			<code class="javascript"> .on('santa', function(){ console.log('Santa?'); });</code>
+			<code class="javascript">phone.callACat();</code>
+		</pre>
+	</div></section>
+
+	<section class="slide"><div>
+		<h2>Promises</h2>
+		<pre>
+			<code class="javascript">phone.callACat()</code>
+			<code class="javascript"> .then(phone.callADog)</code>
+			<code class="javascript"> .then(phone.callAHorse)</code>
+			<code class="javascript"> .then(phone.callSanta)</code>
+			<code class="javascript"> .then(function(){ console.log('Santa?'); });</code>
+		</pre>
+	</div></section>
+
+	<section class="slide shout"><div>
+		<h2>Promises</h2>
+	</div></section>
+
+	<section class="slide"><div>
+		<h2>Откуда они взялись?</h2>
+		<ul>
+			<li class="next">"Promise" 1976 год – Daniel P. Friedman и David Wise<br>"Функция, возвращающая будущее значение"</li>
+			<li class="next">"Future" 1977 год – Henry Baker и Carl Hewitt<br/>"Представление будущего значения"</li>
+		</ul>
+		<div class="next">Статья <a href="http://en.wikipedia.org/wiki/Futures_and_promises" targe="_blank">Википедии</a></div>
+	</div></section>
+
+	<section class="slide"><div>
+		<h2>Реализации</h2>
+		<ul>
+			<li>C++11 (std::future and std::promise)</li>
+			<li>C# (System.Concurrent.Task, async/await)</li>
+			<li>Java (java.util.concurrent.Future)</li>
+			<li>Python (concurrent.futures)</li>
+			<li>JavaScript (ECMAScript 6/2015)</li>
+		</ul>
+	</div></section>
+
+	<section class="slide"><div>
+		<h2>Откуда они взялись в JavaScript?</h2>
+		<ul>
+			<li class="next">Февраль 2010 Kris Kowal (Разработчик <a href="https://github.com/kriskowal/q" target="_blank">Q</a>) предложил Promises/A </li>
+			<li class="next">12 июня 2012 Brian Cavalier, Domenic Denicola и компания предложили Promises/A+</li>
+			<li class="next">Спецификация Promises/A+, стала частью ECMAScript 6/2015</li>
+		</ul>
+	</div></section>
+
+
+	<section class="slide"><div>
+		<h2>Важные факты</h2>
+		<ul>
+			<li class="next">jQuery Promise не соответствует спецификации</li>
+			<li class="next">Каждый Promise начинает исполнение на след. итерации Event Loop</li>
+			<li class="next">Каждый последующий .then() или .catch() тоже на след. итерации</li>
+		</ul>
+	</div></section>
+
+	<section class="slide"><div>
+		<h2>Терминология</h2>
+		<ul>
+			<li class="next">Thenable – объект с методом .then (например jQuery Promise)</li>
+			<li class="next">Pending Promise – обещание ожидает значения</li>
+			<li class="next">Fulfilled Promise – выполненное обещание</li>
+			<li class="next">Rejected Promise – отвергнутое обещание</li>
+			<li class="next">Reason – описание, почему обещание отвергнуто<br/>(обычно объект Error)</li>
+		</ul>
+	</div></section>
+
+	<section class="slide shout"><div>
+		<h2>Что нам даёт Promise</h2>
+	</div></section>
+
+	<section class="slide"><div>
+		<h2>Вместо этого...</h2>
+		<pre>
+			<code class="javascript">callACat(function () {</code>
+			<code class="javascript">	callADog(function () {</code>
+			<code class="javascript">		callAHorse(function () {</code>
+			<code class="javascript">			callSanta(function () {</code>
+			<code class="javascript">				console.log('Where am I?');</code>
+			<code class="javascript">			});</code>
+			<code class="javascript">		});</code>
+			<code class="javascript">	});</code>
+			<code class="javascript">});</code>
+		</pre>
+	</div></section>
+
+	<section class="slide"><div>
+		<h2>Вот это!</h2>
+		<pre>
+			<code class="javascript">phone.callACat()</code>
+			<code class="javascript"> .then(phone.callADog)</code>
+			<code class="javascript"> .then(phone.callAHorse)</code>
+			<code class="javascript"> .then(phone.callSanta)</code>
+			<code class="javascript"> .then(function(){ console.log('Santa?'); });</code>
+		</pre>
+	</div></section>
+
+	<section class="slide cover"><div>
+		<h2 class="white center">Больше примеров</h2>
+		<img src="pictures/more-cover.jpg" height="100%" style="margin-left: -10%">
+	</div></section>
+
+	<section class="slide"><div>
+		<h2>Callback -> Promise</h2>
+		<pre>
+			<code class="javascript">new Promise(function (fulfill, reject) {</code>
+			<code class="javascript">	phone.callACat(function (error, result) {</code>
+			<code class="javascript">		if (error) {</code>
+			<code class="javascript">			reject(error);</code>
+			<code class="javascript">			return;</code>
+			<code class="javascript">		}</code>
+			<code class="javascript">		fulfill(result);</code>
+			<code class="javascript">	});</code>
+			<code class="javascript">});</code>
+		</pre>
+	</div></section>
+
+	<section class="slide"><div>
+		<h2>Thenable, Value -> Promise</h2>
+		<pre>
+			<code class="javascript">Promise.resolve(jQueryPromise);</code>
+			<code class="javascript">Promise.resolve(number);</code>
+			<code class="javascript">Promise.resolve(string);</code>
+			<code class="javascript"></code>
+			<code class="javascript">Promise.reject(new Error('Cat not found'));</code>
+		</pre>
+	</div></section>
+
+	<section class="slide"><div>
+		<h2>Chaining</h2>
+		<pre>
+			<code class="javascript">phone.callACat()</code>
+			<code class="javascript"> .then(function (catResult) {</code>
+			<code class="javascript">   console.log(catResult);</code>
+			<code class="javascript">   return phone.callADog(); // Promise</code>
+			<code class="javascript"> })</code>
+			<code class="javascript"> .then(function (dogResult) {</code>
+			<code class="javascript">   console.log(dogResult);</code>
+			<code class="javascript">   return 'Hello, Dog!'; // Value</code>
+			<code class="javascript"> })</code>
+			<code class="javascript"> .then(function (msg) { console.log(msg); }); // Hello, Dog! </code>
+		</pre>
+	</div></section>
+
+	<section class="slide"><div>
+		<h2>Обработка ошибок</h2>
+		<pre>
+			<code class="javascript">phone.callACat()</code>
+			<code class="javascript"> .then(function () {</code>
+			<code class="javascript">   throw new Error('No cat!');</code>
+			<code class="javascript"> })</code>
+			<code class="javascript"> .then(function () {</code>
+			<code class="javascript">   console.log('This is a cat!'); // skipped</code>
+			<code class="javascript"> })</code>
+			<code class="javascript"> <mark>.catch(function (reason) {</mark></code>
+			<code class="javascript"> 	<mark>console.error(reason);</mark> // No cat!</code>
+			<code class="javascript"> <mark>})</mark>;</code>
+		</pre>
+	</div></section>
+
+	<section class="slide"><div>
+		<h2>Обработка ошибок</h2>
+		<pre>
+			<code class="javascript">phone.callACat()</code>
+			<code class="javascript"> .then(function () {</code>
+			<code class="javascript">   throw new Error('No cat!');</code>
+			<code class="javascript"> })</code>
+			<code class="javascript"> .then(function () {</code>
+			<code class="javascript"> 		console.log('This is a cat!'); // skipped</code>
+			<code class="javascript"> 	}, <mark>function (reason) {</mark></code>
+			<code class="javascript"> 		<mark>console.error(reason);</mark> // No cat!</code>
+			<code class="javascript"> <mark>	}</mark>); // for old browsers no .catch</code>
+		</pre>
+	</div></section>
+
+	<section class="slide"><div>
+		<h2>Rethrow Error</h2>
+		<pre>
+			<code class="javascript">phone.callACat('Tom')</code>
+			<code class="javascript"> .then(function () {</code>
+			<code class="javascript">   throw new Error('No cat!')</code>
+			<code class="javascript"> })</code>
+			<code class="javascript"> .catch(function (reason) {</code>
+			<code class="javascript"> 	reason.message += 'Tom';</code>
+			<code class="javascript"> 	throw reason;</code>
+			<code class="javascript"> });</code>
+		</pre>
+	</div></section>
+
+	<section class="slide"><div>
+		<h2>Promise.all()</h2>
+		<pre>
+			<code class="javascript">Promise.all([</code>
+			<code class="javascript"> phone.callACat(),</code>
+			<code class="javascript"> phone.callADog(),</code>
+			<code class="javascript"> phone.callAHorse()</code>
+			<code class="javascript">])</code>
+			<code class="javascript"> .then(function (resultsList) {</code>
+			<code class="javascript"> 	console.log('Everybody are online!');</code>
+			<code class="javascript"> });</code>
+		</pre>
+	</div></section>
+
+	<section class="slide"><div>
+		<h2>Promise.race()</h2>
+		<pre>
+			<code class="javascript">Promise.race([</code>
+			<code class="javascript"> phone.callACat(),</code>
+			<code class="javascript"> phone.callADog(),</code>
+			<code class="javascript"> phone.callAHorse()</code>
+			<code class="javascript">])</code>
+			<code class="javascript"> .then(function (value) {</code>
+			<code class="javascript"> 	console.log('Who is speaking?');</code>
+			<code class="javascript"> });</code>
+		</pre>
+	</div></section>
+
+	<section class="slide cover" id="can-i-use"><div>
+		<h2>Поддержка браузерами</h2>
+		<img src="pictures/can-i-use.png" width="100%">
+		<style type="text/css">
+			#can-i-use {
+				background-color: #f2e8d5;
+			}
+			#can-i-use img {
+				margin-top: 20%;
+			}
+		</style>
+	</div></section>
+	<section class="slide"><div>
+		<h2>Полезные ссылки</h2>
+		<ul>
+			<li><a href="https://promisesaplus.com/" target="_blank">Спецификация Promises/A+</a></li>
+			<li><a href="https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Promise" target="_blank">Mozilla Developer Network – Promise</a></li>
+			<li><a href="https://www.promisejs.org/" target="_blank">Коротко и понятно о Promises</a></li>
+			<li><a href="https://www.npmjs.com/package/promise" target="_blank">Чистый полифил Promise для старых браузеров</a></li>
+		</ul>
+	</div></section>
+
+	<section class="slide cover" id="qa"><div>
+		<h2 class="center">Спасибо за внимание!</h2>
+		<img src="pictures/cover.jpg" width="100%">
+		<div class="signature">
+			Денис Речкунов, Flamp (<a href="mailto:denis.rechkunov@gmail.com">denis.rechkunov@gmail.com</a>)
+			<div class="contacts">
+				<a href="https://github.com/pragmadash" target="_blank" class="logo-link inline">
+					<img src="pictures/github.png" class="github">
+				</a>
+				<a href="https://twitter.com/pragmadash" target="_blank" class="logo-link inline">
+					<img src="pictures/twitter.png" class="twitter">
+				</a>
+				pragmadash
+			</div>
+		</div>
+		<style type="text/css">
+			#qa img {
+				margin-top: -50px;
+			}
+			#qa h2 {
+				color: white;
+			}
+			#qa .top {
+				margin-top: -70px;
+			}
+			#qa .logo-link {
+				color: transparent;
+				text-align: center;
+			}
+			#qa .inline{
+				display: inline-block;
+			}
+			#qa .logo-link .twitter, #qa .logo-link .github {
+				position: relative;
+				height: 30px;
+			}
+			#qa .signature {
+				color: white;
+				margin-top: 370px;
+				text-align: center;
+			}
+			#qa .signature a {
+				text-decoration: none;
+				background: transparent;
+				color: white;
+			}
+			#qa .contacts {
+				margin-top: -30px;
+				font-size: 50px;
+			}
+		</style>
+	</div></section>
+	<!--
+		To hide progress bar from entire presentation
+		just remove “progress” element.
+		-->
+	<div class="progress"><div></div></div>
+	<script src="node_modules/shower-core/shower.min.js"></script>
+	<!-- Copyright © 2014 Yours Truly, Famous Inc. -->
+	<!-- Photos by John Carey, fiftyfootshadows.net -->
+</body>
+</html>
