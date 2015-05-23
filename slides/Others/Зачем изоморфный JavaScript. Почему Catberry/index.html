@@ -1,0 +1,632 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+	<title>Зачем изоморфный JavaScript? Почему Catberry.js?</title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=792, user-scalable=no">
+	<meta http-equiv="x-ua-compatible" content="ie=edge">
+	<link rel="stylesheet" href="node_modules/shower-ribbon/styles/screen.css">
+	<link rel="stylesheet" href="highlight/default.min.css">
+	<script src="highlight/highlight.min.js"></script>
+	<script>hljs.initHighlightingOnLoad();</script>
+	<style type="text/css">
+		section.white {
+			background-color: white !important;
+		}
+		h2.center {
+			text-align: center !important;
+		}
+
+		h2.white {
+			color: white !important;
+		}
+		h2.black {
+			color: black !important;
+		}
+		h2.flux-green {
+			color: #44B74A !important;
+		}
+		.flux-dark-grey {
+			background-color: #4f4e50 !important;
+		}
+		h2.upper {
+			margin-top: -50px;
+		}
+		h2.bottom {
+			margin-top: 430px;
+		}
+		h2.big {
+			font-size: 70px;
+		}
+		h2.huge {
+			font-size: 120px;
+		}
+		h2.shadowed {
+			color: white;
+			text-shadow: 1px 1px 2px black, 0 0 1em black, 0 0 0.2em black;
+		}
+		img.v-centered {
+			position: relative !important;
+			width: 100%;
+			display: inline-block;
+			vertical-align: middle;
+		}
+	</style>
+</head>
+<body class="list">
+	<header class="caption" id="Caption">
+		<h1>
+			Зачем изоморфный JavaScript? Почему Catberry.js?
+			<a href="http://catberry.org" target="_blank">
+				<img src="pictures/catberry.svg" id="catberry-logo">
+			</a>
+		</h1>
+		<style>
+			#Caption #catberry-logo {
+				width: 50px;
+				height: 50px;
+				margin-bottom: -10px;
+			}
+		</style>
+	</header>
+	<section class="slide cover white" id="Cover"><div>
+		<h2 class="center">
+			Зачем изоморфный JavaScript?<br>Почему Catberry.js?
+		</h2>
+		<a href="http://catberry.org" target="_blank" class="logo-link">
+			<img src="pictures/catberry.svg" class="catberry">
+		</a>
+
+
+		<p class="contacts">
+			<a href="https://github.com/pragmadash" target="_blank" class="logo-link inline">
+				<img src="pictures/github.png" class="github">
+			</a> 
+			<a href="https://twitter.com/pragmadash" target="_blank" class="logo-link inline">
+				<img src="pictures/twitter.png" class="twitter">
+			</a> 
+			pragmadash
+		</p>
+		<p>
+			Денис Речкунов<br/>Ведущий JavaScript-разработчик
+			<a href="http://flamp.ru" target="_blank" class="logo-link">
+				<img src="pictures/flamp.png" class="flamp">
+			</a> 
+		</p>
+		
+		<style>
+			#Cover .logo-link {
+				color: transparent;
+				background: transparent;
+				display: block;
+				text-align: center;
+			}
+
+			#Cover .inline{
+				display: inline-block;
+			}
+
+			#Cover .logo-link img {
+				position: relative;
+			}
+
+			#Cover .logo-link .flamp {
+				height: 40px;
+				float: right;
+			}
+			#Cover .logo-link .catberry {
+				margin-top: -40px;
+				height: 300px;
+			}
+
+			#Cover .logo-link .twitter, #Cover .logo-link .github {
+				height: 30px;
+			}
+
+			#Cover p {
+				margin: -20px 0 0;
+				float: right;
+				line-height: normal;
+				text-align: right;
+				font-size: 30px;
+			}
+			#Cover p.contacts {
+				float: left;
+				text-align: left;
+			}
+		</style>
+	</div></section>
+
+	<section class="slide shout"><div>
+		<h2>Жизненная история</h2>
+	</div></section>
+	<section class="slide cover"><div>
+		<h2 class="center bottom shadowed white">Вы – веб-разработчик</h2>
+		<img src="pictures/web-designers.jpg" height="100%" style="margin-left: 28%">
+	</div></section>
+	<section class="slide cover"><div>
+		<h2 class="center white shadowed bottom">И вот у вас заказчик</h2>
+		<img src="pictures/customer.jpg" height="100%" style="margin-left: 28%">
+	</div></section>
+	<section class="slide cover"><div>
+		<h2 class="center bottom shadowed white">Буду делать Single Page Application!</h2>
+		<img src="pictures/great.jpg" width="100%">
+	</div></section>
+	<section class="slide cover"><div>
+		<h2 class="center bottom shadowed white">Берете любимый фронт-енд фреймворк</h2>
+		<img src="pictures/jim-typing.jpg" width="100%" style="margin-top: -4%;">
+	</div></section>
+	<section class="slide cover"><div>
+		<h2 class="center bottom shadowed white">Радостно сдаёте проект</h2>
+		<img src="pictures/project-finished.jpeg" height="80%" style="margin-left: 16%">
+	</div></section>
+	<section class="slide cover"><div>
+		<img src="pictures/customer-not-glad.jpg" height="100%" style="margin-left: 140px;">
+	</div></section>
+	<section class="slide"><div>
+		<h2>Почему?</h2>
+		<ul>
+			<li class="next">Долго открывается</li>
+			<li class="next">Плохо индексируется</li>
+			<li class="next">В старых браузерах&mdash;ничего</li>
+		</ul>
+	</div></section>
+	<section class="slide"><div>
+		<h2>Что можно сделать?</h2>
+		<ul>
+			<li class="next">Использовать headless browser</li>
+			<li class="next">Написать бэкенд</li>
+			<li class="next">Переписать все на изоморфном JavaScript-фреймворке</li>
+		</ul>
+	</div></section>
+	<section class="slide shout"><div>
+		<h2>Изоморфный JavaScript?</h2>
+	</div></section>
+	<section class="slide shout"><div>
+		<h2>Коротко</h2>
+	</div></section>
+	<section class="slide cover" id="SPA-SEO"><div>
+		<h2>Одностраничный фронт-енд &amp; SEO бэк-енд</h2>
+		<img src="pictures/isomorphic2.jpg" width="100%">
+		<style>
+			#SPA-SEO h2 {
+				margin-top: -68px;
+				height: 90px;
+				margin-left: -63px;
+				background-color: #fff;
+				font-size: 50px;
+			}
+		</style>
+	</div></section>
+	<section class="slide shout"><div>
+		<h2>Подробнее</h2>
+	</div></section>
+	<section class="slide"><div>
+		<h2>Что такое изоморфный JavaScript-код?</h2>
+		<ul>
+			<li class="next">Исполняется в различных окружениях<br>(нам важен сервер и браузер)</li>
+			<li class="next">Гарантирует одно поведение</li>
+			<li class="next">Справляется с разностью окружений через абстракции</li>
+		</ul>
+	</div></section>
+	<section class="slide"><div>
+		<h2>Зачем?</h2>
+		<h3>Хочется:</h3>
+		<ol>
+			<li class="next">Иметь одностраничное приложение</li>
+			<li class="next">Не жертвовать SEO</li>
+			<li class="next">Быструю инициализацию страницы</li>
+			<li class="next">Одну языковую среду &mdash; JavaScript</li>
+			<li class="next">Экономить ресурсы сервера</li>
+			<li class="next">И чтобы все это было просто</li>
+		</ol>
+	</div></section>
+	<section class="slide"><div>
+		<h2>Что получаем</h2>
+		<ol>
+			<li class="next">Одностраничное приложение</li>
+			<li class="next">HTML с сервера, используя тот же код</li>
+			<li class="next">Задержки инициализации нет, HTML пришел с сервера</li>
+			<li class="next">Вы пишите на серверном JavaScript</li>
+			<li class="next">Сервер не особо напрягается (node.js хорош)</li>
+			<li class="next">За вас всё сделает фреймворк (если он хорош)</li>
+		</ol>
+	</div></section>
+	<section class="slide shout"><div>
+		<h2>Какой фреймворк?</h2>
+	</div></section>
+	<section class="slide shout"><div>
+		<h2>Catberry.js конечно же</h2>
+	</div></section>
+	<section class="slide"><div>
+		<h2>Почему?</h2>
+		<ul>
+			<li class="next">Flux-архитектура</li>
+			<li class="next">Изоморфные веб-компоненты</li>
+			<li class="next">Прогрессивный рендеринг</li>
+			<li class="next">Всё на Promises</li>
+			<li class="next">Dependency Injection</li>
+			<li class="next">Неблокирующие алгоритмы</li>
+		</ul>
+	</div></section>
+	<section class="slide cover"><div>
+		<h2 class="center upper huge flux-green">Flux</h2>
+		<img src="pictures/flux/flux_logo.svg" width="100%">
+	</div></section>
+	<section class="slide cover flux-dark-grey"><div>
+		<h2 class="center upper huge flux-green">Flux</h2>
+		<img src="pictures/flux/one.png" class="v-centered">
+	</div></section>
+	<section class="slide cover flux-dark-grey"><div>
+		<h2 class="center upper huge flux-green">Flux</h2>
+		<img src="pictures/flux/two.png" class="v-centered">
+	</div></section>
+	<section class="slide shout"><div>
+		<h2>Почему Flux?</h2>
+	</div></section>
+	<section class="slide"><div>
+		<h2>Flux &mdash; это более безопасный MVC</h2>
+		<ul>
+			<li class="next">Нет моделей и привязок</li>
+			<li class="next">Когда Store изменился, данные запрашиваются заново</li>
+			<li class="next">Есть Dispatcher, который контролирует Workflow</li>
+			<li class="next">Нет беспорядка с событиями</li>
+			<li class="next">Обновление View полностью</li>
+		</ul>
+	</div></section>
+	<section class="slide"><div>
+		<h2>Flux Stores в Catberry.js</h2>
+		Директория "catberry_stores" с .js-файлами<br/>
+		<pre>
+			./catberry_stores/<br/>
+			&nbsp;&nbsp;&nbsp;&nbsp;doge/<br/>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Wow.js<br/>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Such.js<br/>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Store.js<br/>
+			&nbsp;&nbsp;&nbsp;&nbsp;grumpy-cat/<br/>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;No.js<br/>
+		</pre>
+	</div></section>
+	<section class="slide"><div>
+		<h2>Как писать логику Store</h2>
+		<pre>
+			<code class="javascript">module.exports = Wow;</code>
+			<code class="javascript">function Wow() {...}</code>
+			<code class="javascript">// время актуальности данных в мс</code>
+			<code class="javascript">Wow.prototype.$lifetime = 60000;</code>
+			<code class="javascript">// загрузка данных</code>
+			<code class="javascript">Wow.prototype.load = function () {...}</code>
+			<code class="javascript">// обработка Action</code>
+			<code class="javascript">Wow.prototype.handleVeryAction = function () {...}</code>
+		</pre>
+	</div></section>
+	<section class="slide"><div>
+		<h2>Метод "load"</h2>
+		<pre>
+			<code class="javascript">Wow.prototype.load = function () {...}</code>
+			<code class="javascript">	// запрашивает данные, например по REST</code>
+			<code class="javascript">	// возвращает объект или Promise</code>
+			<code class="javascript">	return {such: 'load'};</code>
+			<code class="javascript">};</code>
+		</pre>
+	</div></section>
+	<section class="slide"><div>
+		<h2>Метод "handle"</h2>
+		<pre>
+			<code class="javascript">Wow.prototype.handleVeryAction = function () {...}</code>
+			<code class="javascript">	// может запостить данные по REST</code>
+			<code class="javascript">	// вернуть результат или Promise</code>
+			<code class="javascript">	return {very: 'action'};</code>
+			<code class="javascript">};</code>
+		</pre>
+	</div></section>
+	<section class="slide"><div>
+		<h2>Метод "handle"</h2>
+		<pre>
+			<code class="javascript">Wow.prototype.handleVeryAction = function () {...}</code>
+			<code class="javascript">	// а может отправить сигнал,</code>
+			<code class="javascript">	// что Store изменился</code>
+			<code class="javascript">	this.<mark class="important">$context</mark>.changed();</code>
+			<code class="javascript">};</code>
+		</pre>
+	</div></section>
+	<section class="slide cover"><div>
+		<h2 class="center upper big white">Web/Cat-Components</h2>
+		<img src="pictures/web-comp-logo.svg" width="100%">
+	</div></section>
+	<section class="slide"><div>
+		<h2>Почти как веб-компоненты, но:</h2>
+		<ul>
+			<li class="next">Их можно отрендерить на сервере</li>
+			<li class="next">Они хранятся как директория в проекте</li>
+			<li class="next">Компонент описыватся файлом cat-component.json</li>
+			<li class="next">Шаблон на языке любого&#42; шаблонизатора</li>
+			<li class="next">Нет Shadow DOM</li>
+			<li class="next">Можно ставить через NPM</li>
+		</ul>
+	</div></section>
+	<section class="slide"><div>
+		<h2>Cat-component</h2>
+		<pre>
+			hello-world/<br/>
+			&nbsp;&nbsp;&nbsp;&nbsp;assets/<br/>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;hello.svg<br/>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;world.svg<br/>
+			&nbsp;&nbsp;&nbsp;&nbsp;index.js<br/>
+			&nbsp;&nbsp;&nbsp;&nbsp;template.hbs<br/>
+			&nbsp;&nbsp;&nbsp;&nbsp;error.hbs<br/>
+			&nbsp;&nbsp;&nbsp;&nbsp;cat-component.json<br/>
+		</pre>
+	</div></section>
+	<section class="slide"><div>
+		<h2>Используются как кастомные тэги:</h2>
+		<pre>
+			<code class="html">&lt;cat-hello-world id="uniq-id" </code>
+			<code class="html">  cat-store="some/Store"</code>
+			<code class="html">  any-attribute="any-value"&gt;</code>
+			<code class="html">&lt;/cat-hello-world&gt;</code>
+		</pre>
+		В этот тэг отрендерится шаблон, который может содержать тэги компонентов, процесс повторяется рекурсивно
+	</div></section>
+	<section class="slide"><div>
+		<h2>Как писать логику в index.js</h2>
+		<pre>
+			<code class="javascript">module.exports = HelloWorld;</code>
+			<code class="javascript">function HelloWorld() {...}</code>
+			<code class="javascript">// этапы жизни компонента</code>
+			<code class="javascript">HelloWorld.prototype.render = function () {...}</code>
+			<code class="javascript">HelloWorld.prototype.bind = function () {...}</code>
+			<code class="javascript">HelloWorld.prototype.unbind = function () {...}</code>
+		</pre>
+	</div></section>
+	<section class="slide"><div>
+		<h2>Этап "render"</h2>
+		Тэг компонента рендерит свой шаблон
+		<pre>
+			<code class="javascript">HelloWorld.prototype.render = function () {</code>
+			<code class="javascript">	// может вернуть данные для шаблона</code>
+			<code class="javascript">	// или Promise на них</code>
+			<code class="javascript">	return {hello: 'world'};</code>
+			<code class="javascript">};</code>
+		</pre>
+	</div></section>
+	<section class="slide"><div>
+		<h2>Этап "bind"</h2>
+		Рендеринг завершен, можно привязать события
+		<pre>
+			<code class="javascript">HelloWorld.prototype.bind = function () {</code>
+			<code class="javascript">	// может вернуть карту событий</code>
+			<code class="javascript">	// для дочерних элементов или Promise на нее</code>
+			<code class="javascript">	return {</code>
+			<code class="javascript">		click: {'div.clickable': this.clickHandler}</code>
+			<code class="javascript">	};</code>
+			<code class="javascript">};</code>
+		</pre>
+	</div></section>
+	<section class="slide"><div>
+		<h2>Этап "unbind"</h2>
+		Компонент готовится к удалению или обновлению
+		<pre>
+			<code class="javascript">HelloWorld.prototype.unbind = function () {</code>
+			<code class="javascript">	// здесь нужно прибраться, если вы</code>
+			<code class="javascript">	// что-то делали в bind помимо карты событий</code>
+			<code class="javascript">	// события из карты отвязываются автоматически</code>
+			<code class="javascript">};</code>
+		</pre>
+	</div></section>
+	<section class="slide"><div>
+		<h2>Как в итоге это работает?</h2>
+		<ul>
+			<li class="next">Можно привязать компонент к Store через атрибут <code class="javascript">cat-store</code></li>
+			<li class="next">Когда Store меняется, обновляются все привязанные компоненты</li>
+			<li class="next">Store получают параметры из URL через роутинг</li>
+			<li class="next">Store может использовать данные другого Store</li>
+		</ul>
+	</div></section>
+	<section class="slide shout"><div>
+		<h2>this.$context</h2>
+	</div></section>
+	<section class="slide"><div>
+		<h2>У компонента или Store есть $context:</h2>
+		<ul>
+			<li>isBrowser/isServer</li>
+			<li>userAgent</li>
+			<li>location/referrer</li>
+			<li>locator</li>
+			<li>redirect('location')/notFound()</li>
+			<li>cookie.get('name')/cookie.set(object)</li>
+		</ul>
+	</div></section>
+	<section class="slide"><div>
+		<h2>У компонента дополнительно:</h2>
+		<ul>
+			<li>element</li>
+			<li>attributes</li>
+			<li>getComponentById(‘id’)</li>
+			<li>createComponent(‘name’, attributesObject)</li>
+			<li>collectGarbage()</li>
+			<li>getStoreData()</li>
+			<li>sendAction(‘name’, object)</li>
+			<li>sendBroadcastAction(‘name’, object)</li>
+		</ul>
+	</div></section>
+	<section class="slide"><div>
+		<h2>У Store дополнительно:</h2>
+		<ul>
+			<li>state</li>
+			<li>changed()</li>
+			<li>setDependency('storeName')/unsetDependency('storeName')</li>
+			<li>getStoreData('storeName')</li>
+			<li>sendAction('storeName', ‘actionName’, object)</li>
+			<li>sendBroadcastAction(‘name’, object)</li>
+		</ul>
+	</div></section>
+	<section class="slide"><div>
+		<h2>Как из компонента получить данные Store</h2>
+		<pre>
+			<code class="javascript">this.$context.getStoreData()</code>
+			<code class="javascript">  .then(function () {</code>
+			<code class="javascript">    // ура, Store отдал данные</code>
+			<code class="javascript">  });</code>
+			<code class="javascript">  .catch(function (error) {</code>
+			<code class="javascript">    // печаль :(</code>
+			<code class="javascript">  });</code>
+		</pre>
+	</div></section>
+	<section class="slide"><div>
+		<h2>Как из компонента отправить Action</h2>
+		<pre>
+			<code class="javascript">this.$context.sendAction('item-submit', item)</code>
+			<code class="javascript">  .then(function () {</code>
+			<code class="javascript">    // ура, Action обработался</code>
+			<code class="javascript">  });</code>
+			<code class="javascript">  .catch(function (error) {</code>
+			<code class="javascript">    // печаль :(</code>
+			<code class="javascript">  });</code>
+		</pre>
+	</div></section>
+	<section class="slide shout"><div>
+		<h2>IoC и DI</h2>
+	</div></section>
+	<section class="slide"><div>
+		<h2>Service Locator</h2>
+		<pre>
+			<code class="javascript">locator.register(‘uhr’, UHR);</code>
+			<code class="javascript">locator.registerInstance('uhr', new UHR());</code>
+			<code class="javascript">locator.resolve(‘uhr’);</code>
+			<code class="javascript">locator.resolveAll(‘uhr’);</code>
+			<code class="javascript">locator.resolveInstance(SomeConstructorDependsOnUHR);</code>
+		</pre>
+	</div></section>
+	<section class="slide"><div>
+		<h2>Dependency Injection</h2>
+		<pre>
+			<code class="javascript">function StoreConstructor (<mark class="important">$uhr</mark>, someConfigSection) {</code>
+			<code class="javascript">  // можно внедрять и использовать $uhr</code>
+			<code class="javascript">  // и внедрять даже конфиг-секции</code>
+			<code class="javascript">}</code>
+		</pre>
+	</div></section>
+	<section class="slide shout"><div>
+		<h2>Прогрессивный рендеринг</h2>
+	</div></section>
+	<section class="slide"><div>
+		<h2 class="center">Как работает Catberry.js</h2>
+		<img src="pictures/schema.png" width="80%" style="margin-left: 10%">
+	</div></section>
+	<section class="slide"><div>
+		<h2>Что происходит первый раз на сервере:</h2>
+		<ul>
+			<li class="next">Используется <a href="https://nodejs.org/api/stream.html#stream_api_for_stream_implementors" target="_blank">Node.js Streams API</a>,
+			<br>Catberry реализует Transform Stream</li>
+			<li class="next"><code class="javascript">ourTransform.pipe(response).end(document.render());</code></li>
+			<li class="next">Transform Stream ищет кастомные тэги компонентов в стриме HTML</li>
+			<li class="next">Если нашел&mdash;рендерит в них соответствующий шаблон</li>
+			<li class="next">Который пропускается через такой же Transform Stream</li>
+			<li class="next">Отрендеренный HTML <b>сразу</b> уходит в браузер <b>порциями</b></li>
+		</ul>
+	</div></section>
+	<section class="slide"><div>
+		<h2>Что происходит потом в браузере:</h2>
+		<ul>
+			<li class="next">Используется <a href="https://developer.mozilla.org/en-US/docs/Web/Guide/API/DOM/Manipulating_the_browser_history" target="_blank">History API</a> и перехватывается любой клик по ссылке</li>
+			<li class="next">Если ссылка попадает под роутинг, из URL парсятся новые параметры</li>
+			<li class="next">Параметры применяются к Stores, у них вызывается <code class="javascript">this.$context.changed();</code></li>
+			<li class="next">Вычисляются корни изменений в DOM</li>
+			<li class="next">Начинается пошаговый ререндеринг изменившихся компонентов</li>
+			<li class="next">Данные запрашиваются в процессе</li>
+		</ul>
+	</div></section>
+	<section class="slide cover white" id="progressive-rendering"><div>
+		<img src="pictures/progressive-rendering.png" width="100%">
+		<style type="text/css">
+			#progressive-rendering img {
+				margin-top: 70px;
+			}
+		</style>
+	</div></section>
+	<section class="slide"><div>
+		<h2 class="center">Когда у вас прогрессивный рендеринг</h2>
+		<img src="pictures/network.png" width="100%">
+	</div></section>
+	<section class="slide cover"><div>
+		<img src="pictures/customer-glad.jpg" height="100%" style="margin-left: 15%">
+	</div></section>
+	<section class="slide"><div>
+		<h2>В боевых условиях</h2>
+		<ul>
+			<li>
+				<a href="http://flamp.ru/best" target="_blank">Flamp.ru/best</a>&mdash;это 3 млн уников в месяц и 20 млн просмотров
+			</li>
+			<li>
+				<a href="http://konfettin.ru" target="_blank">Konfettin.ru</a>
+			</li>
+			<li>
+				<a href="http://статус-строй.рф" target="_blank">статус-строй.рф</a>
+			</li>
+			<li>
+				С десяток проектов в разработке по всему миру:<br>
+				Аргентина, Латвия, Украина, США, Россия
+			</li>
+
+		</ul>
+	</div></section>
+	<section class="slide"><div>
+		<h2>С чего начать?</h2>
+		<pre>
+			<code class="javascript">$ npm -g install catberry-cli</code>
+			<code class="javascript">$ catberry init example</code>
+		</pre>
+		<a href="https://github.com/catberry/catberry-todomvc" target="_blank">catberry-todomvc</a><br/>
+		<a href="https://github.com/catberry/catberry-homepage" target="_blank">catberry-homepage</a><br/>
+		<a href="https://github.com/catberry/catberry-debugger" target="_blank">catberry-debugger</a>
+	</div></section>
+	<section class="slide" id="follow"><div>
+		<h2>Где следить за новостями?</h2>
+		<table>
+		<tr>
+			<td><img src="pictures/catberry.svg"></td>
+			<td><a href="http://catberry.org" target="_blank">catberry.org</a></td>
+		</tr>
+		<tr>
+			<td><img src="pictures/github.png"></td>
+			<td><a href="https://github.com/catberry/catberry" target="_blank">github.com/catberry/catberry</a></td>
+		</tr>
+		<tr>
+			<td><img src="pictures/twitter.png"></td>
+			<td><a href="https://twitter.com/catberryjs" target="_blank">twitter.com/catberryjs</a></td>
+		</tr>
+		</table>
+		<style type="text/css">
+			#follow img {
+				height: 64px;
+			}
+			#follow td{
+				vertical-align: middle;
+			}
+			#follow table td {
+				background: transparent;
+			}
+		</style>
+	</div></section>
+	<section class="slide cover" id="qa-cat"><div>
+		<img src="pictures/space-cat.png" width="100%">
+		<h2 >Вопросы?</h2>
+		<style type="text/css">
+			#qa-cat h2{
+				color: #FFF;
+				margin-left: 80%; 
+				margin-top: 15%; 
+			}
+		</style>
+	</div></section>
+	<!--
+		To hide progress bar from entire presentation
+		just remove “progress” element.
+		-->
+	<div class="progress"><div></div></div>
+	<script src="node_modules/shower-core/shower.min.js"></script>
+	<!-- Copyright © 2014 Yours Truly, Famous Inc. -->
+	<!-- Photos by John Carey, fiftyfootshadows.net -->
+</body>
+</html>
