@@ -1,0 +1,324 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+	<title>Отзывчивый UI без блокировки Event Loop</title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=792, user-scalable=no">
+	<meta http-equiv="x-ua-compatible" content="ie=edge">
+	<link rel="stylesheet" href="node_modules/shower-ribbon/styles/screen.css">
+	<link rel="stylesheet" href="highlight/default.min.css">
+	<script src="highlight/highlight.min.js"></script>
+	<script>hljs.initHighlightingOnLoad();</script>
+	<style type="text/css">
+		section.cover.white {
+			background-color: white;
+		}
+		h2.white {
+			color: white;
+		}
+		h2.black {
+			color: black;
+		}
+		h2.center {
+			text-align: center;
+		}
+		h2.small {
+			font-size:80px;
+		}
+		h2.normal {
+			font-size:100px;
+		}
+		h2.top {
+			margin-top: -50px;
+		}
+		h2.upper-bottom {
+			margin-top: 300px;
+		}
+		h2.bottom {
+			margin-top: 400px;
+		}
+		pre.small-code {
+			font-size: 18px;
+		}
+		ul.v-aligned img {
+			height: 32px;
+			vertical-align: middle;
+		}
+		h2.shadowed {
+			color: white;
+			text-shadow: 1px 1px 2px black, 0 0 1em black, 0 0 0.2em black;
+		}
+		code {
+			font-size: 20px;
+		}
+		code.small {
+			font-size: 14px;
+		}
+	</style>
+</head>
+<body class="list">
+	<header class="caption" id="Caption">
+		<h1>
+			Многообещающий JavaScript – Promises
+				<img src="pictures/jsib_logo.png" id="jsib-logo">
+			</a>
+		</h1>
+		<style>
+			#Caption #jsib-logo {
+				width: 50px;
+				height: 50px;
+				margin-bottom: -10px;
+			}
+		</style>
+	</header>
+	<section class="slide cover" id="Cover"><div>
+		<h2 class="center-header">
+			Отзывчивый UI без блокировки Event Loop
+		</h2>
+		<a href="https://vk.com/jsibnsk" target="_blank" class="logo-link">
+			<img src="pictures/jsib_bear.png" class="jsib">
+		</a>
+
+		<p class="contacts">
+			<a href="https://github.com/pragmadash" target="_blank" class="logo-link inline">
+				<img src="pictures/color-github.png" class="github">
+			</a>
+			<a href="https://twitter.com/pragmadash" target="_blank" class="logo-link inline">
+				<img src="pictures/color-twitter.png" class="twitter">
+			</a>
+			pragmadash
+		</p>
+		<p>
+			Денис Речкунов<br/>Ведущий JavaScript-разработчик
+			<a href="http://flamp.ru" target="_blank" class="logo-link">
+				<img src="pictures/flamp.png" class="flamp">
+			</a>
+		</p>
+
+		<style>
+			#Cover {
+				background-color: #FFF;
+			}
+
+			#Cover .logo-link {
+				color: transparent;
+				background: transparent;
+				display: block;
+				text-align: center;
+			}
+
+			#Cover .inline{
+				display: inline-block;
+			}
+
+			#Cover .logo-link img {
+				position: relative;
+			}
+
+			#Cover .logo-link .flamp {
+				height: 40px;
+				float: right;
+			}
+			#Cover .logo-link .jsib {
+				margin-top: 0px;
+				height: 300px;
+			}
+
+			#Cover .logo-link .twitter, #Cover .logo-link .github {
+				height: 30px;
+			}
+
+			#Cover p {
+				margin: -20px 0 0;
+				float: right;
+				line-height: normal;
+				text-align: right;
+				font-size: 30px;
+			}
+			#Cover p.contacts {
+				float: left;
+				text-align: left;
+			}
+		</style>
+	</div></section>
+
+	<section class="slide"><div>
+		<h2>Что такое производительность JavaScript?</h2>
+		<ul>
+			<li class="next">Время исполнения кода</li>
+			<li class="next">Алгоритмические оптимизации</li>
+			<li class="next">Куча нечитабильного "оптимизированного" кода</li>
+			<li class="next">Грязные хаки для VM, которые ускоряют код</li>
+		</ul>
+	</div></section>
+
+	<section class="slide"><div>
+		<h2>Что такое производительность UI?</h2>
+		<ul>
+			<li class="next">Как быстро работает приложение для пользователя</li>
+			<li class="next">Насколько быстро оно реагирует на действия</li>
+			<li class="next">Приложение не подвисает</li>
+		</ul>
+	</div></section>
+
+	<section class="slide"><div>
+		<h2>Почему приложение может подвисать?</h2>
+		<ul>
+			<li class="next">iframe – убийца производительности</li>
+			<li class="next">repaint &amp; reflow – неоптимальная верстка или CSS</li>
+			<li class="next">Блокировка Event Loop</li>
+		</ul>
+	</div></section>
+
+	<section class="slide cover" id="come-on"><div>
+		<img src="pictures/event-loop.png" height="100%" style="margin-left: -5%">
+	</div></section>
+
+	<section class="slide"><div>
+		<h2>Почему Event Loop блокируется?</h2>
+		<ul>
+			<li class="next">Внешние тяжелые обработчики внутри браузера<br>repaint &amp; reflow, iframe</li>
+			<li class="next">Блокирующий JavaScript-код</li>
+		</ul>
+	</div></section>
+
+	<section class="slide"><div>
+		<h2>Блокирующий код</h2>
+		<pre>
+			<code class="javascript">function sort(arr) {</code>
+			<code class="javascript">	var tmp = null;</code>
+			<code class="javascript">	for(var i = 0; i &lt; arr.length; i++)</code>
+			<code class="javascript">		for(var j = 0; j &lt; arr.length - 1; j++)</code>
+			<code class="javascript">			if(arr[j] > arr[j+1]) {</code>
+			<code class="javascript">				tmp = arr[j];</code>
+			<code class="javascript">				arr[j] = arr[j+1];</code>
+			<code class="javascript">				arr[j+1] = tmp;</code>
+			<code class="javascript">			}</code>
+			<code class="javascript">}</code>
+		</pre>
+	</div></section>
+
+	<section class="slide"><div>
+		<h2>В чем же он блокирующий?</h2>
+		<ul>
+			<li class="next">Не рассчитан на очень большие массивы</li>
+			<li class="next">На время сортировки все приложение зависнет</li>
+		</ul>
+	</div></section>
+
+	<section class="slide"><div>
+		<h2>Неблокирующая версия</h2>
+		<pre>
+			<code class="javascript small">function sortStep(arr, i, j, callback) {</code>
+			<code class="javascript small">	if(arr[j] > arr[j + 1]) {</code>
+			<code class="javascript small">		var tmp = arr[j];</code>
+			<code class="javascript small">		var[j] = arr[j + 1];</code>
+			<code class="javascript small">		arr[j + 1] = tmp;</code>
+			<code class="javascript small">	}</code>
+			<code class="javascript small">	if (++j === arr.length - 1) {</code>
+			<code class="javascript small">		i++; j = 0;</code>
+			<code class="javascript small">	}</code>
+			<code class="javascript small">	if (i === arr.length) {</code>
+			<code class="javascript small">		callback();</code>
+			<code class="javascript small">		return;</code>
+			<code class="javascript small">	}</code>
+			<code class="javascript small">	setTimeout(sortStep.bind(this, arr, i, j, callback));</code>
+			<code class="javascript small">}</code>
+		</pre>
+	</div></section>
+
+	<section class="slide"><div>
+		<h2>Неблокирующая версия</h2>
+		<pre>
+			<code class="javascript">function sort(arr, callback) {</code>
+			<code class="javascript">	if (arr.length &lt; 2) {</code>
+			<code class="javascript">		callback();</code>
+			<code class="javascript">		return;</code>
+			<code class="javascript">	}</code>
+			<code class="javascript">	sortStep(arr, 0, 0, callback);</code>
+			<code class="javascript">}</code>
+		</pre>
+	</div></section>
+	<section class="slide shout"><div>
+		<a href="bubble-sort/index.html" target="_blank"><h2>Демо</h2></a>
+	</div></section>
+	<section class="slide"><div>
+		<h2>Преимущества неблокирующего кода</h2>
+		<ul>
+			<li class="next">UI всегда жив и обрабатывает события</li>
+			<li class="next">Параллельное исполнение функций</li>
+			<li class="next">Пользователю приятнее работать с приложением</li>
+		</ul>
+	</div></section>
+	<section class="slide"><div>
+		<h2>Недостатки неблокирующего кода</h2>
+		<ul>
+			<li class="next">Он сложный</li>
+			<li class="next">Общее время исполнения больше</li>
+		</ul>
+	</div></section>
+	<section class="slide"><div>
+		<h2>Полезные ссылки</h2>
+		<ul>
+			<li><a href="https://www.youtube.com/watch?v=8aGhZQkoFbQ" target="_blank">Philip Roberts: What the heck is the event loop anyway? | JSConf EU 2014</a></li>
+			<li><a href="http://latentflip.com/loupe/" target="_blank">Loupe by Philip Roberts</a></li>
+		</ul>
+	</div></section>
+
+	<section class="slide cover" id="qa"><div>
+		<img src="pictures/cover.png" width="100%">
+		<div class="signature">
+			<div class="contacts">
+				<a href="https://github.com/pragmadash" target="_blank" class="logo-link inline">
+					<img src="pictures/color-github.png" class="github">
+				</a>
+				<a href="https://twitter.com/pragmadash" target="_blank" class="logo-link inline">
+					<img src="pictures/color-twitter.png" class="twitter">
+				</a>
+				Денис Речкунов, Flamp
+			</div>
+		</div>
+		<style type="text/css">
+			#qa h2 {
+				color: black;
+			}
+			#qa .top {
+				margin-top: -70px;
+			}
+			#qa .logo-link {
+				color: transparent;
+				text-align: center;
+			}
+			#qa .inline{
+				display: inline-block;
+			}
+			#qa .logo-link .twitter, #qa .logo-link .github {
+				position: relative;
+				height: 30px;
+			}
+			#qa .signature {
+				color: black;
+				margin-top: 445px;
+				text-align: center;
+			}
+			#qa .signature a {
+				text-decoration: none;
+				background: transparent;
+				color: black;
+			}
+			#qa .contacts {
+				margin-top: 100px;
+				font-size: 50px;
+			}
+		</style>
+	</div></section>
+	<!--
+		To hide progress bar from entire presentation
+		just remove “progress” element.
+		-->
+	<div class="progress"><div></div></div>
+	<script src="node_modules/shower-core/shower.min.js"></script>
+	<!-- Copyright © 2014 Yours Truly, Famous Inc. -->
+	<!-- Photos by John Carey, fiftyfootshadows.net -->
+</body>
+</html>

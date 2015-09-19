@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Blocking and Non-blocking sort comparison</title>
+		<script src="bubble-async.js"></script>
+		<script src="bubble.js"></script>
+		<script src="data.js"></script>
+		<style>
+			div {
+				width: 100%;
+				height: 100px;
+			}
+			button {
+				font-size: 35px;
+			}
+			.to-red:hover {
+				background-color: red;
+			}
+			.to-black:hover {
+				background-color: black;
+			}
+		</style>
+	</head>
+	<body>
+		<script>
+			function blocking() {
+				sort(data);
+				showResults();
+			}
+			function nonBlocking() {
+				sortAsync(data, showResults);
+			}
+			function showResults() {
+				document.querySelector('.results').innerHTML = data.toString();
+			}
+		</script>
+		<button onclick="blocking()">Blocking</button>
+		<button onclick="nonBlocking()">Non-Blocking</button>
+		<div class="results"></div>
+		<br>
+		<div class="to-red"></div>
+		<img src="ie.gif">
+		<div class="to-black"></div
+	</body>
+</html>
