@@ -1,0 +1,422 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>Progressive rendering with Catberry.js</title>
+	<meta charset="utf-8">
+	<meta http-equiv="x-ua-compatible" content="ie=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="node_modules/shower-ribbon/styles/screen-16x10.css">
+	<link rel="stylesheet" href="highlight/github.css">
+	<script src="highlight/highlight.min.js"></script>
+	<script>hljs.initHighlightingOnLoad();</script>
+	<style type="text/css">
+		a.logo-link {
+			color: transparent;
+			background: transparent;
+			text-decoration: none;
+			display: inline-block;
+			vertical-align: middle;
+		}
+	</style>
+</head>
+<body class="shower list">
+	<header class="caption" id="Caption">
+		<h1>
+			Progressive rendering with Catberry.js
+			<a href="http://catberry.org" target="_blank">
+				<img src="pictures/catberry.svg" id="catberry-logo">
+			</a>
+		</h1>
+		<style>
+			#Caption #catberry-logo {
+				width: 50px;
+				height: 50px;
+				margin-bottom: -10px;
+			}
+		</style>
+	</header>
+
+	<section class="slide cover white" id="Cover">
+		<h2>
+			Progressive rendering with Catberry.js
+		</h2>
+		<div class="main-logo">
+			<a href="http://catberry.org" target="_blank" class="logo-link">
+				<img src="pictures/catberry.svg" class="catberry">
+			</a>
+		</div>
+
+		<div class="contacts">
+			<a href="https://github.com/pragmadash" target="_blank" class="logo-link">
+				<img src="pictures/github.png" class="github">
+			</a>
+			<a href="https://twitter.com/pragmadash" target="_blank" class="logo-link">
+				<img src="pictures/twitter.png" class="twitter">
+			</a>
+			pragmadash
+		</div>
+		<div class="position">
+			Denis Rechkunov<br/>SDE at
+			<a href="http://aws.amazon.com/" target="_blank" class="logo-link">
+				<img src="pictures/aws_logo.svg" class="aws">
+			</a>
+		</div>
+
+		<style>
+			#Cover h2 {
+				text-align: center;
+			}
+			code {
+				font-size: 22px;
+			}
+			#Cover .main-logo {
+				text-align: center;
+				margin-bottom: 20px;
+			}
+			#Cover .logo-link .aws {
+				height: 38px;
+			}
+			#Cover .logo-link .catberry {
+				height: 300px;
+			}
+
+			#Cover .logo-link .twitter, #Cover .logo-link .github {
+				height: 30px;
+			}
+
+			#Cover .position, #Cover .contacts {
+				font-size: 30px;
+				line-height: normal;
+			}
+			#Cover .position {
+				float: right;
+				text-align: right;
+			}
+			#Cover .contacts {
+				float: left;
+				text-align: left;
+			}
+		</style>
+	</section>
+
+	<section class="slide">
+		<h2>Framework Overview</h2>
+		<ul>
+			<li class="next">Implements Flux and Universal cat(web)-components (server &amp; browser)</li>
+			<li class="next">Computes the whole application state from current URL</li>
+			<li class="next">Supports several template engines (<a href="https://github.com/catberry/catberry-handlebars" target="_blank">Handlebars</a>, <a href="https://github.com/catberry/catberry-jade" target="_blank">Jade</a>, <a href="https://github.com/catberry/catberry-dust" target="_blank">Dust</a>, <a href="https://github.com/ivancevich/catberry-nunjucks" target="_blank">Nunjucks</a>, etc.)</li>
+			<li class="next">Uses promises in its API</li>
+			<li class="next">Implements progressive rendering</li>
+			<li class="next">Supports ES2015 – native on Node.js and uses Babel to run in a browser</li>
+			<li class="next">Has ~90% test coverage and it's used in production</li>
+			<li class="next">Has a small size: whole "Hello-world" app &mdash; 25KB. React (only lib) &mdash; 40KB</li>
+		</ul>
+	</section>
+	<section class="slide shout">
+		<h2 class="shout">Flux Stores</h2>
+	</section>
+	<section class="slide">
+		<h2>Flux Stores in Catberry.js</h2>
+		Directory "catberry_stores" with .js-files<br/>
+		<pre>
+			./catberry_stores/<br/>
+			&nbsp;&nbsp;doge/<br/>
+			&nbsp;&nbsp;&nbsp;&nbsp;Wow.js<br/>
+			&nbsp;&nbsp;&nbsp;&nbsp;Such.js<br/>
+			&nbsp;&nbsp;&nbsp;&nbsp;Store.js<br/>
+			&nbsp;&nbsp;grumpy-cat/<br/>
+			&nbsp;&nbsp;&nbsp;&nbsp;No.js<br/>
+		</pre>
+	</section>
+	<section class="slide">
+		<h2>How to Implement a Store</h2>
+		<pre>
+			<code class="javascript">class MyStore {</code>
+			<code class="javascript"> constructor(locator) {</code>
+			<code class="javascript">  this.$lifetime = 60000; // how long to cache the data (ms)</code>
+			<code class="javascript"> }</code>
+			<code class="javascript"> load() { /* returns data (or promise) for components */ }</code>
+			<code class="javascript"> handleAddItem(args) { /* handles "add-item" */ }</code>
+			<code class="javascript">}</code>
+			<code class="javascript">module.exports = MyStore;</code>
+		</pre>
+	</section>
+	<section class="slide">
+		<h2>Notify that Store's Data is Changed</h2>
+		<pre>
+			<code class="javascript">handleAddItem(args) {</code>
+			<code class="javascript"> // you can get routed parameters from URI</code>
+			<code class="javascript"> this.$context.state.newsCategory;</code>
+			<code class="javascript"> // and notify about changes</code>
+			<code class="javascript"> this.$context.changed();</code>
+			<code class="javascript">}</code>
+		</pre>
+		The <code class="javascript"><a href="http://catberry.org/documentation#stores-context" target="_blank">$context</a></code> is a public interface of the framework.
+		<br/>Every store and component instance has this property.
+	</section>
+	<section class="slide">
+		<h2>Extracting Parameters from URL</h2>
+		<pre>
+			<code>// you define a route</code>
+			<code>'/some/:id[Store1,Store2]/actions?q=:query[Store1]'</code>
+			<code>// go to this link</code>
+			<code>'/some/123/actions?q=find-a-cat'</code>
+			<code>// then Store1 and Store2 will have </code>
+			<code class="javascript">this.$context.state.id === '123'</code>
+			<code>// and only Store1 will have </code>
+			<code class="javascript">this.$context.state.query === 'find-a-cat'</code>
+		</pre>
+	</section>
+	<section class="slide shout">
+		<h2 class="shout">Components</h2>
+	</section>
+	<section class="slide">
+		<h2>Cat-components vs Web-components</h2>
+		<table id="vs-table">
+			<tr>
+				<td><strong>Feature</strong></td>
+				<td class="centered"><strong>Cat</strong></td>
+				<td class="centered"><strong>Web</strong></td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>Define custom elements</td>
+				<td class="good centered">Yes</td>
+				<td class="good centered">Yes</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>Have server-side rendering</td>
+				<td class="good centered">Yes</td>
+				<td class="bad centered">No</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>Support several template engines</td>
+				<td class="good centered">Yes</td>
+				<td class="bad centered">No</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>Organized like directories in a project</td>
+				<td class="good centered">Yes</td>
+				<td class="bad centered">No</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>Can be installed/published using NPM</td>
+				<td class="good centered">Yes</td>
+				<td class="bad centered">No</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>Can be auto-discovered in a project</td>
+				<td class="good centered">Yes</td>
+				<td class="bad centered">No</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>Shadow DOM (styles isolation)</td>
+				<td class="bad centered">No</td>
+				<td class="good centered">Yes</td>
+				<td></td>
+			</tr>
+		</table>
+		<style>
+			#vs-table td {
+				background: none;
+				border: none;
+			}
+			#vs-table .centered {
+				text-align: center;
+			}
+			#vs-table .good, #vs-table .bad {
+				color: white;
+				width: 100px;
+			}
+			#vs-table .good {
+				background-color: #39b54a;
+			}
+			#vs-table .bad {
+				background-color: #c44230;
+			}
+		</style>
+	</section>
+	<section class="slide">
+		<h2>Cat-component</h2>
+		<pre>
+			hello-world/<br/>
+			&nbsp;&nbsp;index.js <strong># exports a class</strong><br/>
+			&nbsp;&nbsp;template.hbs <strong># is rendered inside the component's tag</strong><br/>
+			&nbsp;&nbsp;error.hbs <strong># is rendered instead if error occurs</strong><br/>
+			&nbsp;&nbsp;cat-component.json <strong># defines the component</strong><br/>
+		</pre>
+	</section>
+	<section class="slide">
+		<h2>Using Components as Custom Tags</h2>
+		<pre>
+			<code class="html">&lt;cat-hello-world id="uniq-id" cat-store="some/Store"&gt;</code>
+			<code class="html">&lt;/cat-hello-world&gt;</code>
+		</pre>
+		<p>
+			The template will be rendered inside the tag and if it contains other components' tags the process repeats recursively.
+		</p>
+		<p>
+			All tag attributes are accessible via <code class="javascript">this.$context.attributes</code>
+		</p>
+
+	</section>
+	<section class="slide">
+		<h2>How to Implement a Cat-Component</h2>
+		<pre>
+			<code class="javascript">class MyComponent {</code>
+			<code class="javascript"> constructor(locator) { /* resolve smth from the locator */ }</code>
+			<code class="javascript"> render() { /* gets data (or promise) for the template */ }</code>
+			<code class="javascript"> bind() { /* component appears in DOM */ }</code>
+			<code class="javascript"> unbind() { /* component is removed from DOM */ }</code>
+			<code class="javascript">}</code>
+			<code class="javascript">module.exports = MyComponent;</code>
+		</pre>
+	</section>
+	<section class="slide">
+		<h2>Receiving Data from a Store</h2>
+		<pre>
+			<code class="javascript">render() {</code>
+			<code class="javascript"> return this.$context.getStoreData()</code>
+			<code class="javascript">  .then(data => /* success, the Store returned data */ )</code>
+			<code class="javascript">  .catch(error => /* no luck :( */ );</code>
+			<code class="javascript">}</code>
+		</pre>
+	</section>
+	<section class="slide">
+		<h2>Sending Action to a Store</h2>
+		<pre>
+			<code class="javascript">this.$context.sendAction('add-item', item)</code>
+			<code class="javascript"> .then(result => /* success, we have a result */ )</code>
+			<code class="javascript"> .catch(error => /* no luck :( */ );</code><pre>
+	</section>
+	<section class="slide">
+		<h2 class="shout">Service Locator</h2>
+	</section>
+	<section class="slide"><div>
+		<h2>Service Locator</h2>
+		<pre>
+			<code class="javascript">// service name, class, isSingleton</code>
+			<code class="javascript">app.locator.register('uhr', UHR, true);</code>
+			<code class="javascript">// resolve it in a constructor</code>
+			<code class="javascript">class MyComponent {</code>
+			<code class="javascript"> constructor(locator) {</code>
+			<code class="javascript">  this._uhr = locator.resolve('uhr');</code>
+			<code class="javascript"> }</code>
+			<code class="javascript">}</code>
+		</pre>
+	</div></section>
+	<section class="slide shout">
+		<h2 class="shout">Progressive Rendering</h2>
+	</section>
+	<section class="slide cover white" id="progressive-rendering">
+		<h2>Long Story Short</h2>
+		<img src="pictures/progressive-rendering.png" width="90%">
+		<a href="https://goo.gl/fpkgCr">developers.google.com</a>
+	</section>
+	<section class="slide">
+		<h2>Server-side</h2>
+		<ul>
+			<li class="next">Catberry implements <a href="https://nodejs.org/api/stream.html#stream_api_for_stream_implementors" target="_blank">Transform Stream</a></li>
+			<li class="next">Transform stream is looking for custom tags in the HTML stream</li>
+			<li class="next">If finds &mdash; renders a template into the tag</li>
+			<li class="next">Rendered HTML string goes through the same transform stream recursively</li>
+			<li class="next">HTML <b>chunks</b> are being sent to the browser <b>as soon as they are ready</b></li>
+		</ul>
+	</section>
+	<section class="slide">
+		<h2>Browser-side</h2>
+		<ul>
+			<li class="next">Catberry handles all link clicks using <a href="https://developer.mozilla.org/en-US/docs/Web/Guide/API/DOM/Manipulating_the_browser_history" target="_blank">History API</a></li>
+			<li class="next">If a link is routed by the app, Catberry extracts parameters from it</li>
+			<li class="next">All parameters are bound to certain stores that trigger their "change" event</li>
+			<li class="next">Components are bound to stores and Catberry updates them</li>
+			<li class="next">Catberry computes the roots of changed subtrees in DOM</li>
+			<li class="next">The changes are applied using <a href="https://github.com/patrick-steele-idem/morphdom" target="_blank">morphdom</a> library only to these subtrees</li>
+			<li class="next">All new data is being requested <b>during</b> the rendering process</li>
+		</ul>
+	</section>
+
+	<section class="slide">
+		<h2 class="center">TTFB Using Progressive Rendering</h2>
+		<img src="pictures/network.png" width="100%">
+	</section>
+
+	<section class="slide">
+		<h2 class="shout">DEMO</h2>
+	</section>
+
+	<section class="slide">
+		<h2>Quick Start</h2>
+		<pre>
+			<code class="bash">$ npm -g install catberry-cli</code>
+			<code class="bash">$ catberry init example</code>
+		</pre>
+		<a href="https://github.com/catberry/catberry-example" target="_blank">catberry-example</a><br/>
+		<a href="https://github.com/catberry/catberry-todomvc" target="_blank">catberry-todomvc</a><br/>
+		<a href="https://github.com/catberry/catberry-homepage" target="_blank">catberry-homepage</a><br/>
+		<a href="https://github.com/catberry/catberry-debugger" target="_blank">catberry-debugger</a>
+	</section>
+	<section class="slide" id="follow">
+		<h2>Keep in touch</h2>
+
+			<a href="http://catberry.org" target="_blank">
+				<img src="pictures/catberry.svg">catberry.org
+			</a>
+			<br/>
+			<a href="https://github.com/catberry/catberry" target="_blank">
+				<img src="pictures/github.png">github.com/catberry/catberry
+			</a>
+			<br/>
+			<a href="https://gitter.im/catberry/main" target="_blank">
+				<img src="pictures/gitter.png">gitter.im/catberry/main
+			</a>
+			<br/>
+			<a href="https://twitter.com/catberryjs" target="_blank">
+				<img src="pictures/twitter.png">twitter.com/catberryjs
+			</a>
+		<style type="text/css">
+			#follow a {
+			    text-decoration: none;
+				font-size: 32px;
+				background-image:url();
+				text-align: left;
+				vertical-align: middle;
+			}
+
+			#follow img {
+				height: 32px;
+				background: transparent;
+				vertical-align: middle;;
+				margin-right: 10px;
+			}
+		</style>
+	</section>
+	<section class="slide" id="qa-cat">
+		<img src="pictures/final-cat.jpg" class="cover">
+		<h2 >Thank&nbsp;you!<br>Questions?</h2>
+		<style type="text/css">
+			#qa-cat h2{
+				color: #FFF;
+				font-size: 70px;
+				margin-top: 40%;
+				margin-left: 30%;
+			}
+		</style>
+	</section>
+	<!--
+		To hide progress bar from entire presentation
+		just remove “progress” element.
+		-->
+	<div class="progress"></div>
+	<script src="node_modules/shower-core/shower.min.js"></script>
+	<!-- Copyright © 2015 Yours Truly, Famous Inc. -->
+	<!-- Photos by John Carey, fiftyfootshadows.net -->
+</body>
+</html>
