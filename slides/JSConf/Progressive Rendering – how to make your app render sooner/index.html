@@ -1,0 +1,348 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>Progressive Rendering – how to make your app render sooner</title>
+	<meta charset="utf-8">
+	<meta http-equiv="x-ua-compatible" content="ie=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="node_modules/shower-ribbon/styles/screen-16x9.css">
+	<link rel="stylesheet" href="highlight/github.css">
+	<script src="highlight/highlight.min.js"></script>
+	<script>hljs.initHighlightingOnLoad();</script>
+	<style>
+	 /* remove slide numbers */
+	 .slide::after {
+		 background: none;
+		 color: transparent;
+	 }
+	</style>
+</head>
+<body class="shower full">
+	<header class="caption">
+		<h1>
+			Progressive Rendering – how to make your app render sooner
+		</h1>
+		<p><a href="https://twitter.com/pragmader">Denis Rechkunov</a></p>
+	</header>
+
+	<section class="slide white" id="cover">
+		<img src="pictures/cover.jpg" alt="" class="cover">
+		<header>
+			<h2>
+				Progressive&nbsp;Rendering
+			</h2>
+			<p>How&nbsp;to&nbsp;make&nbsp;your&nbsp;app&nbsp;render&nbsp;sooner&nbsp;<br>Denis&nbsp;Rechkunov&nbsp;(@pragmader)</p>
+
+		</header>
+		<style>
+		 #cover header {
+			 width: 100%;
+			 text-align: center;
+			 margin-top:280px;
+			 left:90px;
+		 }
+		 #cover h2 {
+			 color:white;
+			 text-shadow:2px 2px rgba(0,0,0,0.3);
+			 font-size:70px;
+		 }
+		 #cover p {
+			 color: #c0c0c0;
+			 margin-top:-25px;
+			 font-size:25px;
+		 }
+		</style>
+	</section>
+
+	<section class="slide" id="about-me">
+		<h2>Some facts about me</h2>
+		<img src="pictures/photo.png">
+		<ul>
+			<li>Worked as a .NET developer for 3 years</li>
+			<li>Fell in love with Node.js</li>
+			<li>Worked as a lead developer at Flamp (Yelp-like project in Russia)</li>
+			<li>Now I live in Berlin and work for Amazon, building UI-components</li>
+			<li>@pragmader on <a href="https://twitter.com/pragmader" target="_blank">Twitter</a>, <a href="https://github.com/pragmader" target="_blank">GitHub</a>, <a href="https://medium.com/@pragmader" target="_blank">Medium</a>, etc</li>
+		</ul>
+		<style>
+		 #about-me img {
+			 position: absolute;
+			 top: 60px;
+			 right: 90px;
+			 width: 150px;
+			 height: 150px;
+		 }
+		</style>
+	</section>
+	<section class="slide">
+		<h2>We're going to talk about</h2>
+		<ul>
+			<li>Typical server-side rendering today</li>
+			<li>Why it's not good for user experience</li>
+			<li>How can we make it better</li>
+		</ul>
+	</section>
+
+	<section class="slide">
+		<h2 class="shout" style="font-size: 100px;">Server-side rendering<br> in general first</h2>
+	</section>
+
+	<section class="slide">
+		<h2>Majority of Node.js apps nowadays</h2>
+		<pre><code class="javascript">
+(req, res, next) => {
+	const urlParts = url.parse(req.url, true);
+	getData(urlParts.query.id)
+		.then(data => template.render(data))
+		.then(html => <mark>res.end(html)</mark>);
+}
+		</code></pre>
+	</section>
+
+	<section class="slide">
+		<h2>What's wrong with that?</h2>
+		<ul>
+			<li class="next">The entire HTML document is buffered in memory until it's ready</li>
+			<li class="next">We have to request data from a database or service to build a document</li>
+			<li class="next">It's a potentially slow operation and might last for ~500ms or more</li>
+			<li class="next">Let's imagine we have to do 10 requests and each depends on a previous one</li>
+			<li class="next">In this worst case, your users <strong>would not see anything at least for 5 seconds</strong></li>
+		</ul>
+	</section>
+	<section class="slide">
+		<h2 class="shout" style="font-size: 90px">What do your users think?<h2>
+	</section>
+	<section class="slide">
+		<h2 class="shout" style="font-size: 90px">Some of them are just sad<h2>
+	</section>
+	<section class="slide">
+		<img src="pictures/sad-erik.gif" class="place" width="100%">
+	</section>
+	<section class="slide">
+		<h2 class="shout" style="font-size: 90px">Some of them are very angry<h2>
+	</section>
+	<section class="slide">
+		<img src="pictures/angry-wolverine.gif" class="place" width="100%">
+	</section>
+	<section class="slide">
+		<h2 class="shout" style="font-size: 80px">And some of them know that<br>progressive rendering exists<h2>
+	</section>
+	<section class="slide">
+		<img src="pictures/guy-knows.gif" class="place" width="100%">
+	</section>
+	<section class="slide">
+		<h2 class="shout" style="font-size: 90px">How can we fix this?<h2>
+	</section>
+	<section class="slide">
+		<h2 class="shout" style="font-size: 90px">Instead of sending the<br>whole HTML buffer at once<h2>
+	</section>
+	<section class="slide">
+		<img src="pictures/all-at-once.gif" class="place" width="100%">
+	</section>
+	<section class="slide">
+		<h2 class="shout" style="font-size: 90px">We can send <br>HTML by multiple chunks<h2>
+	</section>
+	<section class="slide">
+		<img src="pictures/chunks.gif" class="place" width="100%">
+	</section>
+	<section class="slide">
+		<h2 class="shout" style="font-size: 90px">And this would be <br>progressive rendering<h2>
+	</section>
+	<section class="slide">
+		<img src="pictures/pr.gif" class="place" width="75%">
+	</section>
+	<section class="slide">
+		<h2 class="shout" style="font-size: 90px">Never heard of it, <br>is it new?<h2>
+	</section>
+	<section class="slide">
+		<h2>Back in 1997</h2>
+		<p>RFC 2068. HTTP/1.1</p>
+		<p>"The <strong>chunked encoding</strong> modifies the body of a message in order to
+			transfer it as a series of chunks, each with its own size indicator,
+			followed by an optional footer containing entity-header fields. This
+			allows dynamically-produced content to be transferred along with the
+			information necessary for the recipient to verify that it has
+				 received the full message."</p>
+	</section>
+	<section class="slide">
+		<h2>Back in 2005</h2>
+		<p><strong><a href="https://blog.codinghorror.com/the-lost-art-of-progressive-html-rendering/" target="_blank">"The Lost Art of Progressive HTML Rendering"</a> by Jeff Atwood</strong></p>
+		<p class="next">"One thing I dislike about ASP.NET is that it renders the entire web page in memory before sending one single byte of that page to the browser"</p>
+		<p class="next">"What's even more galling is that HTML was originally designed to render progressively as content is received"</p>
+	</section>
+	<section class="slide">
+		<h2>Netscape 1.0</h2>
+		<p>Netscape 1.0's early beta versions introduced the "progressive rendering" of pages and images, meaning that the page begins to appear and the text can be read even before all of the text and/or images have been completely downloaded.</p>
+	</section>
+	<section class="slide">
+		<h2 class="shout" style="font-size: 90px">If we edit the previous code</h2>
+	</section>
+	<section class="slide">
+		<pre><code class="javascript">
+(req, res, next) => {
+	const urlParts = url.parse(req.url, true);
+	getData(urlParts.query.id)
+		.then(data => template.render(data))
+		.then(html => <mark>res.end(html)</mark>);
+}
+		</code></pre>
+	</section>
+
+	<section class="slide" id="pr-code">
+		<pre><code class="javascript">
+(req, res, next) => {
+	const urlParts = url.parse(req.url, true);
+	getHeaderData(urlParts.query.id).then(headerData => {
+			<mark>res.write(template.render('header', headerData));</mark>
+			return getLeftMenuData(headerData.userId);
+		}).then(leftMenuData => {
+			<mark>res.write(template.render('leftMenu', leftMenuData));</mark>
+			return getMainBlockData(leftMenuData.currentSection);
+		})
+		.then(mainBlockData => /* etc. */)
+		.then(html => <mark>res.end()</mark>);
+}
+		</code></pre>
+		<style>
+		 #pr-code code {
+			 font-size: 13pt
+		 }
+		</style>
+	</section>
+	<section class="slide">
+		<h2 class="shout" style="font-size: 90px">And we can use <br>Node.js streams</h2>
+	</section>
+
+	<section class="slide">
+		<pre><code class="javascript">
+(req, res, next) => {
+	const urlParts = url.parse(req.url, true);
+	const pageStream = new <mark>MyReadable(urlParts)</mark>;
+	pageStream.pipe(res);
+}
+</code></pre>
+	</section>
+	<section class="slide" id="stream-code">
+		<pre><code class="javascript">
+const Readable = require('stream').Readable;
+class MyReadable extends Readable {
+	constructor(options) {
+		 super(options);
+	}
+	_read(size) {
+		this.push('chunk of HTML');
+		this.push(null);
+	}
+}
+		</code></pre>
+		<style>
+		 #stream-code code {
+			 font-size: 16pt
+		 }
+		</style>
+	</section>
+
+	<section class="slide">
+		<h2 class="shout" style="font-size: 90px">Why progressive rendering is better?<h2>
+	</section>
+
+	<section class="slide">
+		<h2>Advantages</h2>
+		<ul>
+			<li class="next">Less TTFB, a user sees the first part of the content immediately</li>
+			<li class="next">Browser works more efficiently loading resources in parallel</li>
+			<li class="next">It aligns with architecture based on microservices very well</li>
+			<li class="next">Even though your API/Database is slow, a user is thinking your app is fast</li>
+			<li class="next">This approach is more scalable than buffering the whole page</li>
+		</ul>
+	</section>
+
+	<section class="slide">
+		<h2>Browser loads resources in parallel</h2>
+		<img src="pictures/network.png" width="100%">
+	</section>
+
+	<section class="slide">
+		<h2>But it's not perfect</h2>
+		<ul>
+			<li class="next">We can set HTTP status code and headers only before the first byte</li>
+			<li class="next">This includes Cookie, redirects, not found pages, etc.</li>
+			<li class="next">That means we have to request main data first without pushing any HTML</li>
+			<li class="next">A user isn't able to interact with a page till it's fully loaded</li>
+			<li class="next">You have to split your page's data into small pieces (microservices)</li>
+		</ul>
+	</section>
+
+	<section class="slide">
+		<h2 class="shout" style="font-size: 90px">What about client-side rendering?<h2>
+	</section>
+
+	<section class="slide">
+		<h2>Simple as that</h2>
+		<ul>
+			<li class="next">Split data into small queries</li>
+			<li class="next">Render as soon as you've got data</li>
+			<li class="next">Try to make your interface not "jumpy" using placeholders</li>
+		</ul>
+	</section>
+
+	<section class="slide">
+		<h2>Facebook uses placeholders</h2>
+		<img src="pictures/facebook.png" width="100%">
+	</section>
+
+	<section class="slide">
+		<h2 class="shout" style="font-size: 90px">Is there a library/framework?<h2>
+	</section>
+
+	<section class="slide">
+		<h2>Existing solutions</h2>
+		<ul>
+			<li><a href="https://github.com/aickin/react-dom-stream">github.com/aickin/react-dom-stream</a></li>
+			<li><a href="https://github.com/zalando/tailor">github.com/zalando/tailor</a></li>
+			<li><a href="http://www.dustjs.com">Dust.js by LinkedIn</a></li>
+			<li><a href="https://github.com/marko-js/marko">github.com/marko-js/marko</a></li>
+			<li><a href="https://github.com/digitaldesignlabs/talisman">github.com/digitaldesignlabs/talisman</a></li>
+			<li><a href="http://catberry.org">Catberry.js</a></li>
+		</ul>
+	</section>
+	<section class="slide">
+		<h2>Summary</h2>
+		<ul>
+			<li class="next">Many data requests => it means you need progressive rendering</li>
+			<li class="next">The technology is very old and perfectly supported by browsers and Node.js</li>
+			<li class="next">Not that hard to implement, you can use Node.js streams</li>
+			<li class="next">Has some disadvantages you should keep in mind</li>
+			<li class="next">There are some existing solutions</li>
+		</ul>
+	</section>
+
+	<section class="slide">
+		<h2 class="shout" style="font-size: 80px">The point is...<h2>
+	</section>
+
+	<section class="slide">
+		<h2 class="shout" style="font-size: 80px">Don't make your users wait<br>Make your apps render sooner<h2>
+	</section>
+	<section class="slide">
+		<img src="pictures/runner.gif" class="place" width="100%">
+	</section>
+	<section class="slide">
+		<h2 class="shout">Thank you!</h2>
+		<p class="place" style="margin-top: 150px">
+			Denis Rechkunov	(<a href="https://twitter.com/pragmader" target="_blank">@pragmader</a>)
+			<br>The Gifs were taken from <a href="http://giphy.com" target="_blank">Giphy</a>
+		</p>
+	</section>
+
+	<!--
+		To hide progress bar from entire presentation
+		just remove “progress” element.
+		-->
+	<div class="progress"></div>
+	<script src="node_modules/shower-core/shower.min.js"></script>
+	<!-- Copyright © 2015 Yours Truly, Famous Inc. -->
+	<!-- Photos by John Carey, fiftyfootshadows.net -->
+</body>
+</html>
